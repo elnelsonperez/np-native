@@ -1,6 +1,5 @@
 package com.nppms;
 
-import javax.annotation.Nullable;
 import java.util.Map;
 
 class BtMessage {

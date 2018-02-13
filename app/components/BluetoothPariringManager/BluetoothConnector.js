@@ -25,7 +25,7 @@ export default class BluetoothConnector extends React.Component {
   }
 
   sendMsg() {
-    Bluetooth.sendMessage(new BtMessage({type: "test", corr_id: 0, payload: "Test msg"}))
+    Bluetooth.sendMessage(new BtMessage({type: "TEST", corr_id: 0, payload: "Test desde celular"}))
   }
 
   searchForNpmodule() {
@@ -36,20 +36,14 @@ export default class BluetoothConnector extends React.Component {
 
     for (let item in Events) {
       if (Events.hasOwnProperty(item)) {
-        event = Events[item]
-        Bluetooth.on(event, (e) => {
-          if (event === Events.RECEIVED) {
-            Bluetooth.sendMessage(
-                new BtMessage (
-                    {
-                      type: e.type,
-                      corr_id: e.corr_id,
-                      payload: "Mensaje Recibido!"
-                    }
-                )
-            )
+        Bluetooth.on(Events[item], (e) => {
+          console.log(e)
+          event = Events[item];
+          if (event === Events.RECEIVED && e.type === "TEST") {
+            this.addMessageToList(e.payload.data)
+          } else {
+            this.addMessageToList("EVENT ["+event+"]",e)
           }
-          this.addMessageToList("EVENT ["+event+"]",e)
         })
       }
     }

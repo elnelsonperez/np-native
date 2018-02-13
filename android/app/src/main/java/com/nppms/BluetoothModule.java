@@ -127,6 +127,7 @@ public class BluetoothModule extends ReactContextBaseJavaModule {
             sendEvent("dataReceived", params);
             System.out.println(mensaje);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             System.out.println("Invalid Message Received");
         }
     }
