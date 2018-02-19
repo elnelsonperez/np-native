@@ -28,7 +28,6 @@ import com.github.douglasjunior.bluetoothclassiclibrary.BluetoothStatus;
 import com.github.douglasjunior.bluetoothclassiclibrary.BluetoothWriter;
 import com.google.gson.Gson;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class BluetoothModule extends ReactContextBaseJavaModule {
@@ -48,6 +47,13 @@ public class BluetoothModule extends ReactContextBaseJavaModule {
             searchForNpModule();
         }};
     private int bluetoothConnectionRetryTimeout = 12000;
+    private static final String BT_STATUS_CHANGED = "bluetooth_status_changed";
+    private static final String STATUS_CHANGED = "status_changed";
+    private static final String DATA_RECEIVED = "data_received";
+    private static final String SEARCHING = "searching";
+    private static final String CONNECTION_ATTEMP = "connection_attemp";
+
+    private HashSet<String> hubWhitelist = new HashSet<>();
 
     private String parseBtAdapterStatus (int state) {
         switch (state) {
@@ -91,7 +97,7 @@ public class BluetoothModule extends ReactContextBaseJavaModule {
                     WritableMap params = Arguments.createMap();
                     String estado = parseBtAdapterStatus(state);
                     params.putString("status", estado);
-                    sendEvent("bluetoothStatus", params);
+                    sendEvent(BT_STATUS_CHANGED, params);
                     if (estado.equals("ON")) {
                         if (currentStatus != null && currentStatus == BluetoothStatus.NONE) {
                             searchForNpModule();
@@ -118,19 +124,25 @@ public class BluetoothModule extends ReactContextBaseJavaModule {
     }
 
     private void parseIncomingMessage (String msg) {
-        try {
-            BtMessage mensaje =  gson.fromJson(msg, BtMessage.class);
-            WritableMap params = Arguments.createMap();
-            params.putString("type", mensaje.getType());
-            params.putDouble("corr_id", mensaje.getCorr_id());
-            params.putMap("payload", Arguments.makeNativeMap(mensaje.getPayload()));
-            sendEvent("dataReceived", params);
-            System.out.println(mensaje);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println("Invalid Message Received");
-        }
+        WritableMap params = Arguments.createMap();
+        params.putString("data", msg);
+        sendEvent(DATA_RECEIVED, params);
     }
+
+//    private void parseIncomingMessage (String msg) {
+//        try {
+//            BtMessage mensaje =  gson.fromJson(msg, BtMessage.class);
+//            WritableMap params = Arguments.createMap();
+//            params.putString("type", mensaje.getType());
+//            params.putDouble("corr_id", mensaje.getCorr_id());
+//            params.putMap("payload", Arguments.makeNativeMap(mensaje.getPayload()));
+//            sendEvent(DATA_RECEIVED, params);
+//            System.out.println(mensaje);
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//            System.out.println("Invalid Message Received");
+//        }
+//    }
 
     private void initializeBluetoothService() {
         BluetoothConfiguration config = new BluetoothConfiguration();
@@ -171,7 +183,7 @@ public class BluetoothModule extends ReactContextBaseJavaModule {
 
                 WritableMap params = Arguments.createMap();
                 params.putString("status",status.toString());
-                sendEvent( "statusChanged", params);
+                sendEvent( STATUS_CHANGED, params);
 
                 System.out.println("*********** "+status.toString());
             }
@@ -213,7 +225,7 @@ public class BluetoothModule extends ReactContextBaseJavaModule {
         if (!isServiceRunning(BluetoothClassicService.class)) {
             initializeBluetoothService();
         }
-        sendEvent("searchNpModule", null);
+        sendEvent(SEARCHING, null);
         //Searching paired devices
         Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
         Boolean found = false;
@@ -235,8 +247,9 @@ public class BluetoothModule extends ReactContextBaseJavaModule {
     }
 
     private void connectToNpModule(BluetoothDevice device) {
+        sendEvent(CONNECTION_ATTEMP, null);
         bluetoothServiceInstance.connect(device);
-        sendEvent("connectionWithNpModule", null);
+
 
     }
 
@@ -252,10 +265,10 @@ public class BluetoothModule extends ReactContextBaseJavaModule {
 
 
     @ReactMethod
-    public void initialize (Promise promise) {
+    public void initialize (String HubMacAddress, Promise promise) {
+        hubWhitelist.add(HubMacAddress);
 
         bluetoothEnablePromise = promise;
-
         //Check if bluetooth is supported
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {
@@ -273,10 +286,8 @@ public class BluetoothModule extends ReactContextBaseJavaModule {
         }
     }
 
-    private Set<String> getNpHubsMacAddresses() {
-        Set<String> lista  = new HashSet<>();
-        lista.add("B8:27:EB:6D:6D:51");
-        return lista;
+    private HashSet getNpHubsMacAddresses() {
+        return hubWhitelist;
     }
 
     private boolean isServiceRunning(Class<?> serviceClass) {
