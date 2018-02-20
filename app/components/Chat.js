@@ -9,8 +9,8 @@ export default class Chat extends Component {
     this.state = {
       messages: [],
     }
-
   }
+  
   componentWillMount() {
     this.setState({
       messages: [
