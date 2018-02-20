@@ -1,57 +1,75 @@
-import React from 'react';
-import { StyleSheet, View, Text, Button } from 'react-native';
-import BluetoothManager from "./app/components/BluetoothManager"
-export default class App extends React.Component {
+import React,{Component} from 'react';
+import {View, StatusBar, Text, StyleSheet, ToolbarAndroid} from 'react-native'
+import { TabNavigator } from 'react-navigation';
+import Icon from 'react-native-vector-icons/FontAwesome'
+import Home from './app/components/Home'
+import Chat from './app/components/Chat'
+const AppContent = TabNavigator({
+  Home: {
+    screen: Home
+  },
+  Mensajes: {
+    screen: Chat
+  }
+},{
+  initialRouteName: 'Mensajes',
+  tabBarOptions: {
+    activeTintColor: '#FCFCFC',
+    labelStyle: {
+      fontSize: 15,
+    },
+    style: {
+      backgroundColor: '#1976D2' ,
+    },
+  },
+  tabBarPosition: 'bottom'
+})
+
+export default class App extends Component  {
 
   constructor () {
     super();
+    this.state = {hamburgerIcon: null};
+    Icon.getImageSource("bars",22,"#FCFCFC").then((source) => this.setState({ hamburgerIcon: source }));
   }
 
-  componentWillMount() {
-
-  }
-
-  render() {
+  render () {
     return (
-        <View style={styles.container}>
-          <View style={styles.logoContainer}>
-            <Text style={styles.logoText}>NP PMS</Text>
-          </View>
-          <View style={styles.mainContainer}>
-            <BluetoothManager />
-          </View>
+        <View style={{flex: 1}}>
+          <StatusBar   />
+          <ToolbarAndroid
+              navIcon={this.state.hamburgerIcon}
+              title="NP PMS"
+              titleColor={'#FCFCFC'} style={styles.toolbar}/>
+          {/*<View style={styles.npContainer}>*/}
+          {/*<Text style={styles.npTitle}>NP PMS</Text>*/}
+          {/*</View>*/}
+          <AppContent />
         </View>
-    );
+    )
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    alignItems: "stretch"
-  },
-  logoContainer: {
-    flexDirection: "column",
-    flexBasis: 280,
-    flexGrow: 0,
-    flexShrink: 0,
-    backgroundColor: "#0D47A1",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  logoText: {
-    fontSize: 65,
-    fontFamily: "Roboto",
-    fontWeight: "500",
-    color: "#ffff"
-  },
-  mainContainer: {
-    flexGrow: 1,
-    flexDirection: "column",
-    justifyContent: "center",
 
-    alignItems: "stretch",
-    // backgroundColor: "#96a18d"
+const styles = StyleSheet.create({
+  toolbar: {
+    height: 50,
+    backgroundColor:'#1976D2'
   },
+
+  npTitle: {
+    alignSelf: 'center',
+    color: '#FCFCFC',
+    fontSize: 25,
+    fontWeight: "600",
+    backgroundColor:'#1976D2'
+  },
+  npContainer : {
+    backgroundColor: '#1976D2',
+    borderBottomColor: "#FCFCFC",
+    borderBottomWidth: 1,
+    paddingBottom:5
+  }
+
+
 });

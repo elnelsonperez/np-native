@@ -10,7 +10,9 @@ export default class BluetoothConnector extends React.Component {
       listData: []
     }
     this.sendMsg = this.sendMsg.bind(this)
+    this.ReqMsg = this.ReqMsg.bind(this)
     this.searchForNpmodule = this.searchForNpmodule.bind(this)
+    this.autoPull = this.autoPull.bind(this)
     this.counter = 1;
   }
 
@@ -24,13 +26,35 @@ export default class BluetoothConnector extends React.Component {
     }))
   }
 
-  sendMsg() {
-    console.log("Enviando")
+  ReqMsg() {
     Bluetooth.sendMessage(
         new BtMessage(
             {
               type: "GET_TODAY_MENSAJES",
               payload: {}
+            }
+        ))
+  }
+
+  sendMsg() {
+    Bluetooth.sendMessage(
+        new BtMessage(
+            {
+              type: "SEND_MENSAJE_TO_SERVER",
+              payload: {
+                oficial_unidad_id: 2,
+                temp_id: 1,
+                contenido: "Mensaje desde el Hub!"
+              }
+            }
+        ))
+  }
+  autoPull () {
+    Bluetooth.sendMessage(
+        new BtMessage(
+            {
+              type: "AUTO_PULL_MENSAJES",
+              payload: true
             }
         ))
   }
@@ -46,7 +70,7 @@ export default class BluetoothConnector extends React.Component {
         Bluetooth.on(Events[item], (e) => {
           event = Events[item];
           if (event === Events.DATA_RECEIVED) {
-            console.log(e,$i++)
+            console.log(JSON.parse(e),e.length)
           } else {
             this.addMessageToList("EVENT ["+event+"]",e)
           }
@@ -68,7 +92,7 @@ export default class BluetoothConnector extends React.Component {
         <View style={styles.container}>
           <View style={{flex: 4}}>
             <FlatList
-                data={this.state.listData}
+                data={this.state.listData.reverse()}
                 renderItem={({item}) => (<Text>{item.message}</Text>)}
             />
           </View>
@@ -83,12 +107,22 @@ export default class BluetoothConnector extends React.Component {
             }
           }>
             <Button
-                title="Connect to NpModule"
+                title="Connect"
                 color="#0D47A1"
                 onPress={this.searchForNpmodule}
             />
             <Button
-                title="Send msg"
+                title="AutoPull?"
+                color="#0D47A1"
+                onPress={this.autoPull}
+            />
+            <Button
+                title="Req Msgs"
+                color="#0D47A1"
+                onPress={this.ReqMsg}
+            />
+            <Button
+                title="Send Msg"
                 color="#0D47A1"
                 onPress={this.sendMsg}
             />

@@ -123,10 +123,17 @@ public class BluetoothModule extends ReactContextBaseJavaModule {
                 .emit(eventName, params);
     }
 
+    private void sendEventWithStringData (
+            String eventName,
+            String data) {
+        getReactApplicationContext()
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit(eventName, data);
+    }
+
+
     private void parseIncomingMessage (String msg) {
-        WritableMap params = Arguments.createMap();
-        params.putString("data", msg);
-        sendEvent(DATA_RECEIVED, params);
+        sendEventWithStringData(DATA_RECEIVED, msg);
     }
 
 //    private void parseIncomingMessage (String msg) {
@@ -148,7 +155,7 @@ public class BluetoothModule extends ReactContextBaseJavaModule {
         BluetoothConfiguration config = new BluetoothConfiguration();
         config.context = getReactApplicationContext();
         config.bluetoothServiceClass = BluetoothClassicService.class;
-        config.bufferSize = 1024;
+        config.bufferSize = 99999;
         config.characterDelimiter = '\n';
         config.deviceName = "PMS Client";
         config.callListenersInMainThread = true;
