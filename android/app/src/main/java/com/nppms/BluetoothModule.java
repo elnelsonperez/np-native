@@ -46,7 +46,7 @@ public class BluetoothModule extends ReactContextBaseJavaModule {
         public void handleMessage(Message msg){
             searchForNpModule();
         }};
-    private int bluetoothConnectionRetryTimeout = 12000;
+    private int bluetoothConnectionRetryTimeout = 5000;
     private static final String BT_STATUS_CHANGED = "bluetooth_status_changed";
     private static final String STATUS_CHANGED = "status_changed";
     private static final String DATA_RECEIVED = "data_received";
@@ -86,7 +86,6 @@ public class BluetoothModule extends ReactContextBaseJavaModule {
         };
         reactContext.addActivityEventListener(mActivityEventListener);
         IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-        System.out.print(getCurrentActivity());
         BroadcastReceiver mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -94,10 +93,8 @@ public class BluetoothModule extends ReactContextBaseJavaModule {
                 if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
                     final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
                             BluetoothAdapter.ERROR);
-                    WritableMap params = Arguments.createMap();
                     String estado = parseBtAdapterStatus(state);
-                    params.putString("status", estado);
-                    sendEvent(BT_STATUS_CHANGED, params);
+                    sendEventWithStringData(BT_STATUS_CHANGED, estado);
                     if (estado.equals("ON")) {
                         if (currentStatus != null && currentStatus == BluetoothStatus.NONE) {
                             searchForNpModule();
@@ -188,9 +185,7 @@ public class BluetoothModule extends ReactContextBaseJavaModule {
                     }, bluetoothConnectionRetryTimeout);
                 }
 
-                WritableMap params = Arguments.createMap();
-                params.putString("status",status.toString());
-                sendEvent( STATUS_CHANGED, params);
+                sendEventWithStringData( STATUS_CHANGED, status.toString());
 
                 System.out.println("*********** "+status.toString());
             }
@@ -273,8 +268,10 @@ public class BluetoothModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void initialize (String HubMacAddress, Promise promise) {
-        hubWhitelist.add(HubMacAddress);
+        sendEventWithStringData(BT_STATUS_CHANGED,
+                parseBtAdapterStatus(BluetoothAdapter.getDefaultAdapter().getState()));
 
+        hubWhitelist.add(HubMacAddress);
         bluetoothEnablePromise = promise;
         //Check if bluetooth is supported
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();

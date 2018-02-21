@@ -1,49 +1,47 @@
 import React, { Component } from 'react';
-import { Text } from 'react-native';
+// import { Text,View } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat'
+import {observer,inject} from 'mobx-react'
+// import {autorun} from 'mobx'
+import {Send} from 'react-native-gifted-chat'
 
+@inject('store')
+@observer
 export default class Chat extends Component {
-
   constructor (props) {
     super(props);
-    this.state = {
-      messages: [],
-    }
+    this.renderSend = this.renderSend.bind(this)
   }
-  
+
   componentWillMount() {
-    this.setState({
-      messages: [
-        {
-          _id: 1,
-          text: 'Mensaje hardcodeado de prueba. Yey!',
-          createdAt: new Date(),
-          user: {
-            _id: 2,
-            name: 'React Native'
-          },
-        },
-      ],
-    })
 
   }
 
-
-  onSend(messages = []) {
-    this.setState(previousState => ({
-      messages: GiftedChat.append(previousState.messages, messages),
-    }))
+  onSend(mensajes = []) {
+    this.props.store.sendMessagesToServer(mensajes)
   }
+
+  renderSend(props) {
+    return (
+        <Send
+            {...props}
+            label={"Enviar"}
+        >
+        </Send>
+    );
+  }
+
 
   render() {
     return (
         <GiftedChat
-            messages={this.state.messages}
+            messages={this.props.store.mensajes.slice()}
+            placeholder={"Escriba su mensaje..."}
+            renderSend={this.renderSend}
             onSend={messages => this.onSend(messages)}
-            user={{
-              _id: 1,
-            }}
+            user={{_id: this.props.store.userId}}
         />
+
     )
   }
 }
