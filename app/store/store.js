@@ -41,8 +41,16 @@ class store {
   }
 
   @action receiveServerMessages (mensajes) {
+    const old = this.mensajes.slice()
     for (let m of mensajes) {
-     this.mensajes.push(this.parseServerMessage(m))
+      const parsed = this.parseServerMessage(m);
+      const existing = old.findIndex(v => v._id === m.id)
+      if (existing !== -1) {
+        old[existing] = parsed;
+        this.mensajes.replace(old);
+      } else {
+        this.mensajes.push(parsed)
+      }
     }
   }
 
