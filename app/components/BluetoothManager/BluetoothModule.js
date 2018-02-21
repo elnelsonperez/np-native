@@ -4,12 +4,11 @@ import {DeviceEventEmitter} from 'react-native';
 import BtMessage from "../../core/BtMessage";
 
 const Events = {
-    STATUS_CHANGES: "statusChanged",
-    CONNECTION_LOST: "connectionLost",
-    CONNECTED: 'connectionWithNpModule',
-    RECEIVED: 'dataReceived',
-    BLUETOOTH_STATUS_CHANGE: "bluetoothStatus",
-    SEARCHING: "searchNpModule"
+  BT_STATUS_CHANGED: "bluetooth_status_changed",
+  STATUS_CHANGED: "status_changed",
+  DATA_RECEIVED: "data_received",
+  SEARCHING: "searching",
+  CONNECTION_ATTEMP: "connection_attemp"
 }
 
 const Bluetooth = {
@@ -22,8 +21,8 @@ const Bluetooth = {
   searchForNpModule: function () {
     BluetoothModule.searchForNpModule()
   },
-  initialize: function () {
-    return BluetoothModule.initialize()
+  initialize: function (mac_address) {
+    return BluetoothModule.initialize(mac_address)
   },
   /**
    * @param {Number} timeout
