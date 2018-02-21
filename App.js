@@ -36,15 +36,13 @@ export default class App extends Component  {
   render () {
     return (
         <View style={{flex: 1}}>
-          <StatusBar   />
+          <StatusBar/>
           <ToolbarAndroid
               navIcon={this.state.hamburgerIcon}
               title="NP PMS"
               titleColor={'#FCFCFC'} style={styles.toolbar}/>
-          {/*<View style={styles.npContainer}>*/}
-          {/*<Text style={styles.npTitle}>NP PMS</Text>*/}
-          {/*</View>*/}
           <AppContent />
+
         </View>
     )
   }
