@@ -47,6 +47,7 @@ export default class Splash extends Component {
     return (
         <View style={styles.container}>
           <Text style={styles.logoText}>NP PMS</Text>
+
           <Text style={styles.status}>{this.state.statusText}</Text>
         </View>
     );

@@ -55,16 +55,44 @@ class store {
   }
 
   parseServerMessage (mensaje) {
-    return {
-      _id: mensaje.id,
-      text: mensaje.contenido,
-      createdAt: new Date(mensaje.creado_en),
-      received: true,
-      user: {
-        _id: mensaje.remitente.id,
-        name: mensaje.remitente.nombre + " " + mensaje.remitente.apellido
-      },
-    };
+
+    const timestamp=Date.parse(mensaje.creado_en)
+
+    let d = new Date()
+    if (isNaN(timestamp)===false)
+    {
+     d =new Date(timestamp);
+
+    } else {
+      console.log (mensaje)
+    }
+
+    if (mensaje.sentido === 0) {
+      return {
+        _id: mensaje.id,
+        text: mensaje.contenido,
+        createdAt: d,
+        received: true,
+        sent: true,
+        user: {
+          _id: mensaje.remitente.id,
+          name: mensaje.remitente.nombre + " " + mensaje.remitente.apellido
+        },
+      };
+    } else {
+      return {
+        _id: mensaje.id,
+        text: mensaje.contenido,
+        createdAt: new Date(mensaje.creado_en),
+        received: true,
+        sent: true,
+        user: {
+          _id: mensaje.oficial_unidad_id,
+          name: mensaje.oficial_unidad.nombre + " " + mensaje.oficial_unidad.apellido
+        },
+      };
+    }
+
   }
 
   @computed get userId() {
@@ -104,7 +132,7 @@ class store {
       Bluetooth.sendMessage(
           new BtMessage(
               {
-                type: "SEND_MENSSAGE_TO_SERVER",
+                type: "SEND_MESSAGE_TO_SERVER",
                 payload: {
                   oficial_unidad_id: v.user._id,
                   contenido: v.text,

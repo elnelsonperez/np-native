@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-// import { Text,View } from 'react-native';
+import { View,Text,StyleSheet } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat'
 import {observer,inject} from 'mobx-react'
 // import {autorun} from 'mobx'
 import {Send} from 'react-native-gifted-chat'
+import Snackbar from 'react-native-snackbar';
 
 @inject('store')
 @observer
@@ -11,6 +12,7 @@ export default class Chat extends Component {
   constructor (props) {
     super(props);
     this.renderSend = this.renderSend.bind(this)
+    this.avatarPressed = this.avatarPressed.bind(this)
   }
 
   componentWillMount() {
@@ -31,17 +33,46 @@ export default class Chat extends Component {
     );
   }
 
+  avatarPressed (user) {
+    Snackbar.show({
+      title: user.name,
+      duration: Snackbar.LENGTH_SHORT,
+    });
+  }
 
   render() {
-    return (
-        <GiftedChat
-            messages={this.props.store.mensajes.slice()}
-            placeholder={"Escriba su mensaje..."}
-            renderSend={this.renderSend}
-            onSend={messages => this.onSend(messages)}
-            user={{_id: this.props.store.userId}}
-        />
+    let toRender =
+        <View style={{ flex: 1 , justifyContent: "center", alignItems:"center"}}>
+          <Text style={{color: '#1976D2', fontSize: 17}}>Cargando mensajes...</Text>
+        </View>
 
-    )
+
+    if (this.props.store.mensajes.length > 0) {
+      toRender =
+          <GiftedChat
+              messages={this.props.store.mensajes.slice()}
+              placeholder={"Escriba su mensaje..."}
+              renderSend={this.renderSend}
+              onSend={messages => this.onSend(messages)}
+              user={{_id: this.props.store.userId}}
+              inverted={false}
+              onPressAvatar={this.avatarPressed}
+              showAvatarForEveryMessage={true}
+              keyboardShouldPersistTaps={'never'}
+          />
+    }
+    return toRender
   }
 }
+
+const styles = StyleSheet.create({
+  loading: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
+})

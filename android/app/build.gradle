@@ -94,13 +94,13 @@ def enableSeparateBuildPerCPUArchitecture = false
 def enableProguardInReleaseBuilds = false
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 26
     buildToolsVersion '26.0.2'
 
     defaultConfig {
         applicationId "com.nppms"
         minSdkVersion 18
-        targetSdkVersion 22
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         ndk {
@@ -137,11 +137,13 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-snackbar')
     compile project(':react-native-vector-icons')
     compile project(':react-native-maps')
     compile project(':react-native-background-timer')
     compile project(':react-native-push-notification')
     compile fileTree(dir: "libs", include: ["*.jar"])
+    //noinspection GradleCompatible
     compile "com.android.support:appcompat-v7:23.0.1"
     compile "com.facebook.react:react-native:+"  // From node_modules
     compile 'com.github.douglasjunior.AndroidBluetoothLibrary:BluetoothClassicLibrary:0.3.4'

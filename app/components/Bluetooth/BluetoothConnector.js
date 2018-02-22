@@ -30,7 +30,6 @@ export default class BluetoothConnector extends React.Component {
           store.appendMessage(data.payload)
           break
         case "NEW_SERVER_MESSAGES":
-          console.log(e)
           store.receiveServerMessages(data.payload)
           break
       }
