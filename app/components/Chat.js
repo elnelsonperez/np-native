@@ -55,7 +55,6 @@ export default class Chat extends Component {
               renderSend={this.renderSend}
               onSend={messages => this.onSend(messages)}
               user={{_id: this.props.store.userId}}
-              inverted={false}
               onPressAvatar={this.avatarPressed}
               showAvatarForEveryMessage={true}
               keyboardShouldPersistTaps={'never'}

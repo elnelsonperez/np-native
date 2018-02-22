@@ -2,6 +2,7 @@
 import { observable, action, computed,extendObservable } from 'mobx';
 import {Bluetooth, Events} from './../components/Bluetooth/BluetoothModule'
 import BtMessage from "../core/BtMessage";
+import moment from 'moment'
 
 class store {
   @observable mensajes = []
@@ -31,7 +32,7 @@ class store {
     return {
       _id: mensaje.id,
       text: mensaje.contenido,
-      createdAt: new Date(mensaje.creado_en),
+      createdAt:  moment(mensaje.creado_en).toDate(),
       received: true,
       sent: true,
       user: {
@@ -56,17 +57,7 @@ class store {
 
   parseServerMessage (mensaje) {
 
-    const timestamp=Date.parse(mensaje.creado_en)
-
-    let d = new Date()
-    if (isNaN(timestamp)===false)
-    {
-     d =new Date(timestamp);
-
-    } else {
-      console.log (mensaje)
-    }
-
+    const d = moment(mensaje.creado_en).toDate();
     if (mensaje.sentido === 0) {
       return {
         _id: mensaje.id,
@@ -83,7 +74,7 @@ class store {
       return {
         _id: mensaje.id,
         text: mensaje.contenido,
-        createdAt: new Date(mensaje.creado_en),
+        createdAt: d,
         received: true,
         sent: true,
         user: {
