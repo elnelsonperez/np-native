@@ -3931,6 +3931,10 @@ react-native-gifted-chat@^0.3.0:
     shallowequal "1.0.2"
     uuid "3.1.0"
 
+react-native-google-maps-directions@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/react-native-google-maps-directions/-/react-native-google-maps-directions-1.1.2.tgz#a362a9c3c266d9c7e853696e2ffe99193f67d64d"
+
 react-native-invertible-scroll-view@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/react-native-invertible-scroll-view/-/react-native-invertible-scroll-view-1.1.1.tgz#43039037e6537dc8c4f29baae1cd1a223bc25d81"

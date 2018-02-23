@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Text , StyleSheet, View} from 'react-native';
+import { Text , StyleSheet,Button, View} from 'react-native';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
 import * as Progress from 'react-native-progress';
 MapboxGL.setAccessToken(
     'sk.eyJ1IjoiZWxuZWxzb25wZXJleiIsImEiOiJjamR6N3c2ZWg0bWV1MzNxcHhuMHFxN3BkIn0.YIqeih5lO_YU43ZHTS1v3A');
+import getDirections from 'react-native-google-maps-directions'
 
 export default class Home extends Component {
 
@@ -14,6 +15,7 @@ export default class Home extends Component {
       isAndroidPermissionGranted: false,
       activeExample: -1,
     };
+    this.handleGetDirections = this.handleGetDirections.bind(this)
   }
 
   async componentWillMount() {
@@ -59,6 +61,32 @@ export default class Home extends Component {
 
   }
 
+  handleGetDirections () {
+    const data = {
+      destination: {
+        latitude: 19.459881,
+        longitude: -70.661594
+      }
+    }
+
+    getDirections(data)
+  }
+
+  renderAnnotations () {
+    return (
+        <MapboxGL.PointAnnotation
+            key='pointAnnotation'
+            id='pointAnnotation'
+            coordinate={[-70.661594, 19.459881]}>
+
+          <View style={styles.annotationContainer}>
+            <View style={styles.annotationFill} />
+          </View>
+          <MapboxGL.Callout selected={true} title='#35 Tiempo: 00:35:00' />
+        </MapboxGL.PointAnnotation>
+    )
+  }
+
   render() {
     if ( !this.state.isAndroidPermissionGranted) {
       if (this.state.isFetchingAndroidPermission) {
@@ -89,7 +117,6 @@ export default class Home extends Component {
       )
     } else {
 
-      let directions = {"routes":[{"geometry":{"coordinates":[[-70.669408,19.442716],[-70.671457,19.444537],[-70.67106,19.444972],[-70.670725,19.445077],[-70.669136,19.443795],[-70.668629,19.443795],[-70.668262,19.444076],[-70.667873,19.444448],[-70.665839,19.449538],[-70.665473,19.453239],[-70.665873,19.456494],[-70.666188,19.456651],[-70.666091,19.459014],[-70.661592,19.45987]],"type":"LineString"},"legs":[{"summary":"","weight":958.1,"duration":460.5,"steps":[],"distance":2947.3}],"weight_name":"routability","weight":958.1,"duration":460.5,"distance":2947.3}],"waypoints":[{"name":"Autopista Duarte","location":[-70.669408,19.442716]},{"name":"Carretera Don Pedro","location":[-70.661592,19.45987]}],"code":"Ok","uuid":"cjdzhqczd0inw49ls39t1zl3j"}
       return (
           <View style={{flex: 1}}>
             <MapboxGL.MapView
@@ -100,13 +127,11 @@ export default class Home extends Component {
                 rotateEnabled={false}
                 styleURL={"mapbox://styles/elnelsonperez/cjdz3c7xj1kt12ss6psoiv9ax"}
                 style={{flex:1}} >
-              <MapboxGL.Animated.ShapeSource id="routeSource" shape={directions.routes[0].geometry}>
-                <MapboxGL.Animated.LineLayer
-                    style={layerStyles.route}
-                id='mapbox-directions-line'/>
-              </MapboxGL.Animated.ShapeSource>
+              {this.renderAnnotations()}
             </MapboxGL.MapView>
-
+            <View style={styles.container}>
+              <Button onPress={this.handleGetDirections} title="Obtener direcciones" />
+            </View>
           </View>
       );
     }
@@ -114,13 +139,6 @@ export default class Home extends Component {
 
 }
 
-const layerStyles = MapboxGL.StyleSheet.create({
-  route: {
-    lineColor: "#188def",
-    lineWidth: 2,
-    lineOpacity: 0.65
-  },
-});
 
 const styles = StyleSheet.create({
   noPermissionsText: {
@@ -136,7 +154,20 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flex:1
+  },
+  annotationContainer: {
+    width: 30,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    borderRadius: 15,
+  },
+  annotationFill: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: '#e51b11',
+    transform: [{ scale: 0.6 }],
   }
-
-
 });
