@@ -9,6 +9,16 @@
     hoist-non-react-statics "^2.2.2"
     prop-types "^15.5.10"
 
+"@mapbox/react-native-mapbox-gl@^6.0.3":
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/@mapbox/react-native-mapbox-gl/-/react-native-mapbox-gl-6.0.3.tgz#eec96ad717ef2a9841cfa8f12667fc04276f20ca"
+  dependencies:
+    "@turf/helpers" "4.6.0"
+
+"@turf/helpers@4.6.0":
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/@turf/helpers/-/helpers-4.6.0.tgz#12398733b8ae28420df6166fa44c7ee8ffd6414c"
+
 "@types/node@^8.0.24":
   version "8.9.4"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.9.4.tgz#dfd327582a06c114eb6e0441fa3d6fab35edad48"
@@ -3936,15 +3946,21 @@ react-native-lightbox@^0.7.0:
   dependencies:
     prop-types "^15.5.10"
 
-react-native-maps@^0.19.0:
-  version "0.19.0"
-  resolved "https://registry.yarnpkg.com/react-native-maps/-/react-native-maps-0.19.0.tgz#ce94fad1cf360e335cb4338a68c95f791e869074"
-
 react-native-parsed-text@^0.0.19:
   version "0.0.19"
   resolved "https://registry.yarnpkg.com/react-native-parsed-text/-/react-native-parsed-text-0.0.19.tgz#1aacca6f9ee82f939f60ef985df90c97bd55c45a"
   dependencies:
     prop-types "^15.5.10"
+
+react-native-progress-bar@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/react-native-progress-bar/-/react-native-progress-bar-0.1.2.tgz#2fbe32ed49d15e2a57a2b9d29b6d588a4fa1554e"
+
+react-native-progress@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/react-native-progress/-/react-native-progress-3.4.0.tgz#c002e6efb2f0b82dd6889510e669c492da2718ac"
+  dependencies:
+    prop-types "^15.5.8"
 
 react-native-push-notification@^3.0.2:
   version "3.0.2"

@@ -99,7 +99,7 @@ android {
 
     defaultConfig {
         applicationId "com.nppms"
-        minSdkVersion 18
+        minSdkVersion 23
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -139,15 +139,16 @@ android {
 dependencies {
     compile project(':react-native-snackbar')
     compile project(':react-native-vector-icons')
-    compile project(':react-native-maps')
     compile project(':react-native-background-timer')
     compile project(':react-native-push-notification')
+    compile project(':mapbox-react-native-mapbox-gl')
     compile fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleCompatible
     compile "com.android.support:appcompat-v7:23.0.1"
     compile "com.facebook.react:react-native:+"  // From node_modules
     compile 'com.github.douglasjunior.AndroidBluetoothLibrary:BluetoothClassicLibrary:0.3.4'
     compile 'com.google.code.gson:gson:2.8.2'
+
 }
 
 // Run this once to be able to run the application with BUCK

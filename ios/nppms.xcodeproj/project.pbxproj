@@ -37,7 +37,6 @@
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		BC0BC28466F54E99A7E8AFA8 /* libRNBackgroundTimer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27DD7C5CC927466FB2C9CACA /* libRNBackgroundTimer.a */; };
-		C58F115C663E45C98D79CD9E /* libAirMaps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A13E6C1F52C446D9BD9687A /* libAirMaps.a */; };
 		2B2D7357C69F4D8B863E1C0F /* libSQLite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 36284D42769B491999E1DF55 /* libSQLite.a */; };
 		59066F20D8B945D9B4D40595 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB7BD9CAB324D1FA764B7BE /* libsqlite3.0.tbd */; };
 		E689051A9B5D4FA8B0CA0319 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D535008217FA4D48A8114F8B /* libRNVectorIcons.a */; };
@@ -282,8 +281,6 @@
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		C1DDA8E72B5A4CDBAE7A131B /* RNBackgroundTimer.xcodeproj */ = {isa = PBXFileReference; name = "RNBackgroundTimer.xcodeproj"; path = "../node_modules/react-native-background-timer/ios/RNBackgroundTimer.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		27DD7C5CC927466FB2C9CACA /* libRNBackgroundTimer.a */ = {isa = PBXFileReference; name = "libRNBackgroundTimer.a"; path = "libRNBackgroundTimer.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
-		03D2D84E7732479BA62379A5 /* AirMaps.xcodeproj */ = {isa = PBXFileReference; name = "AirMaps.xcodeproj"; path = "../node_modules/react-native-maps/lib/ios/AirMaps.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		1A13E6C1F52C446D9BD9687A /* libAirMaps.a */ = {isa = PBXFileReference; name = "libAirMaps.a"; path = "libAirMaps.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		C1D464BF8F2C4F1B824952A5 /* SQLite.xcodeproj */ = {isa = PBXFileReference; name = "SQLite.xcodeproj"; path = "../node_modules/react-native-sqlite-storage/src/ios/SQLite.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		36284D42769B491999E1DF55 /* libSQLite.a */ = {isa = PBXFileReference; name = "libSQLite.a"; path = "libSQLite.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		DAB7BD9CAB324D1FA764B7BE /* libsqlite3.0.tbd */ = {isa = PBXFileReference; name = "libsqlite3.0.tbd"; path = "usr/lib/libsqlite3.0.tbd"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = sourcecode.text-based-dylib-definition; explicitFileType = undefined; includeInIndex = 0; };
@@ -331,7 +328,6 @@
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				BC0BC28466F54E99A7E8AFA8 /* libRNBackgroundTimer.a in Frameworks */,
-				C58F115C663E45C98D79CD9E /* libAirMaps.a in Frameworks */,
 				2B2D7357C69F4D8B863E1C0F /* libSQLite.a in Frameworks */,
 				59066F20D8B945D9B4D40595 /* libsqlite3.0.tbd in Frameworks */,
 				E689051A9B5D4FA8B0CA0319 /* libRNVectorIcons.a in Frameworks */,
@@ -505,7 +501,6 @@
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				C1DDA8E72B5A4CDBAE7A131B /* RNBackgroundTimer.xcodeproj */,
-				03D2D84E7732479BA62379A5 /* AirMaps.xcodeproj */,
 				C1D464BF8F2C4F1B824952A5 /* SQLite.xcodeproj */,
 				9B4FCF23B43F4CBAAA70DDC8 /* RNVectorIcons.xcodeproj */,
 				D5D2C059DBA84DC6B6CE7DB6 /* RNSnackbar.xcodeproj */,
@@ -1101,7 +1096,6 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-background-timer/ios",
-					"$(SRCROOT)/../node_modules/react-native-maps/lib/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-sqlite-storage/src/ios",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-snackbar/ios",
@@ -1129,7 +1123,6 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-background-timer/ios",
-					"$(SRCROOT)/../node_modules/react-native-maps/lib/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-sqlite-storage/src/ios",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-snackbar/ios",
@@ -1155,7 +1148,6 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-background-timer/ios",
-					"$(SRCROOT)/../node_modules/react-native-maps/lib/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-sqlite-storage/src/ios",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-snackbar/ios",
@@ -1180,7 +1172,6 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-background-timer/ios",
-					"$(SRCROOT)/../node_modules/react-native-maps/lib/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-sqlite-storage/src/ios",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-snackbar/ios",
@@ -1217,7 +1208,6 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-background-timer/ios",
-					"$(SRCROOT)/../node_modules/react-native-maps/lib/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-sqlite-storage/src/ios",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-snackbar/ios",
@@ -1254,7 +1244,6 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-background-timer/ios",
-					"$(SRCROOT)/../node_modules/react-native-maps/lib/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-sqlite-storage/src/ios",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-snackbar/ios",
