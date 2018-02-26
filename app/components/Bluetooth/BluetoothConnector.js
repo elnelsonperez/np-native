@@ -13,10 +13,12 @@ export default class BluetoothConnector extends React.Component {
 
     const store = this.props.store
     Bluetooth.on(Events.STATUS_CHANGED, (e) => {
+
       store.setBluetoothStatus(e)
     })
 
     Bluetooth.on(Events.BT_STATUS_CHANGED, (e) => {
+
       store.setBluetoothAdapterStatus(e)
     })
 
@@ -31,6 +33,9 @@ export default class BluetoothConnector extends React.Component {
           break
         case "NEW_SERVER_MESSAGES":
           store.receiveServerMessages(data.payload)
+          break
+        case "NEW_SERVER_INCIDENCIAS":
+          store.receiveServerIncidencias(data.payload)
           break
       }
     })

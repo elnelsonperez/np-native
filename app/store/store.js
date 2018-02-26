@@ -1,11 +1,12 @@
 
-import { observable, action, computed,extendObservable } from 'mobx';
+import { observable, action, computed, extendObservable } from 'mobx';
 import {Bluetooth, Events} from './../components/Bluetooth/BluetoothModule'
 import BtMessage from "../core/BtMessage";
 import moment from 'moment'
 
 class store {
   @observable mensajes = []
+  @observable incidencias = []
   @observable bluetoothStatus = null;
   @observable bluetoothAdapterStatus = null;
   @observable config = null
@@ -48,11 +49,24 @@ class store {
       const existing = old.findIndex(v => v._id === m.id)
       if (existing !== -1) {
         old[existing] = parsed;
-        this.mensajes.replace(old);
       } else {
-        this.mensajes.push(parsed)
+        old.push(parsed)
       }
     }
+    this.mensajes.replace(old);
+  }
+
+  @action receiveServerIncidencias (incidencias) {
+    const old = this.incidencias.slice()
+    for (let i of incidencias) {
+      const existing = old.findIndex(v => v.id === i.id)
+      if (existing !== -1) {
+        old[existing] = i;
+      } else {
+        old.push(parsed)
+      }
+    }
+    this.incidencias.replace(old);
   }
 
   parseServerMessage (mensaje) {

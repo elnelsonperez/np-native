@@ -68,9 +68,9 @@ class App extends Component  {
   }
 
   render () {
-    // let render = <Splash onReady={() => {this.splashReady()}} />
-    // if (this.state.ready) {
-      let render = (
+    let render = <Splash onReady={() => {this.splashReady()}} />
+    if (this.state.ready) {
+       render = (
           <View style={{flex: 1}}>
             <ToolbarAndroid
                 navIcon={this.state.hamburgerIcon}
@@ -78,11 +78,11 @@ class App extends Component  {
                 titleColor={'#FCFCFC'} style={styles.toolbar}/>
             <AppContent />
           </View>)
-    // }
+    }
     return (
           <View style={{flex: 1}}>
             <StatusBar/>
-            {/*<Bluetooth />*/}
+            <Bluetooth />
             {render}
           </View>
     )
