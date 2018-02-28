@@ -114,7 +114,7 @@ class App extends Component  {
           <View style={{flex: 1}}>
             <ToolbarAndroid
                 navIcon={this.state.hamburgerIcon}
-                title="NP PMS"
+                title="NP PMS  -  Unidad #1"
                 titleColor={'#FCFCFC'} style={styles.toolbar}/>
             <AppContent />
           </View>)
