@@ -15,11 +15,6 @@ export default class Chat extends Component {
     this.avatarPressed = this.avatarPressed.bind(this)
   }
 
-
-  componentDidMount () {
-    this.props.store.resetUnread()
-  }
-
   onSend(mensajes = []) {
     this.props.store.sendMessagesToServer(mensajes)
   }

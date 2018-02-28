@@ -83,26 +83,28 @@ export default class Home extends Component {
         movingMap: true
       })
       const center = centroid(this.props.store.config.sector.limites)
-      await this._map.flyTo(center.geometry.coordinates)
-      await this._map.zoomTo(14)
+      await this._map.flyTo(center.geometry.coordinates,300)
+      await this._map.zoomTo(14,300)
       this.setState({
         movingMap: false
       })
     }
   }
 
-  renderAnnotations () {
-    return (
-        <MapboxGL.PointAnnotation
-            key='pointAnnotation'
-            id='pointAnnotation'
-            coordinate={[-70.661594, 19.459881]}>
-          <View style={styles.annotationContainer}>
-            <View style={styles.annotationFill} />
-          </View>
-          <MapboxGL.Callout selected={true} title='#35 Tiempo: 00:35:00' />
-        </MapboxGL.PointAnnotation>
-    )
+  renderIncidencias () {
+    return this.props.store.incidencias.map(i => {
+      return (
+          <MapboxGL.PointAnnotation
+              key={i.id}
+              id={i.id.toString()}
+              coordinate={i.ubicacion.coordinates.slice()}>
+            <View style={styles.annotationContainer}>
+              <View style={styles.annotationFill} />
+            </View>
+            {/*<MapboxGL.Callout selected={true} title='#35 Tiempo: 00:35:00' />*/}
+          </MapboxGL.PointAnnotation>
+      )
+    })
   }
 
   render() {
@@ -146,7 +148,7 @@ export default class Home extends Component {
                 rotateEnabled={false}
                 styleURL={"mapbox://styles/elnelsonperez/cjdz3c7xj1kt12ss6psoiv9ax"}
                 style={{flex:1}} >
-              {this.renderAnnotations()}
+              {this.renderIncidencias()}
               <MapboxGL.Animated.ShapeSource id="polygonSource" shape={store.config.sector.limites}>
                 <MapboxGL.Animated.FillLayer
                     style={{fillOpacity: 0.20, fillColor: '#f44242',fillOutlineColor: "#BD2934"}}

@@ -55,6 +55,10 @@ const AppContent = TabNavigator({
             </View>
         )
       },
+      tabBarOnPress: ({jumpToIndex,scene}) => {
+        store.resetUnread()
+        jumpToIndex(scene.index)
+      }
     }
   }
 },{

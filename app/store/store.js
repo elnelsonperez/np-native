@@ -54,8 +54,9 @@ class store {
         old.push(parsed)
       }
     }
-    this.unreadMessagesCount = mensajes.length
     this.mensajes.replace(old);
+    this.unreadMessagesCount =
+        this.mensajes.filter( v => v.user._id !== this.config.oficial.id).length
   }
 
   @action resetUnread () {
@@ -69,7 +70,7 @@ class store {
       if (existing !== -1) {
         old[existing] = i;
       } else {
-        old.push(parsed)
+        old.push(i)
       }
     }
     this.incidencias.replace(old);
