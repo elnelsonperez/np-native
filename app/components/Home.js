@@ -28,7 +28,8 @@ export default class Home extends Component {
       isAndroidPermissionGranted: isGranted,
       isFetchingAndroidPermission: false,
       mapDownloaded: false,
-      downloadProgress: 0
+      downloadProgress: 0,
+      movingMap: false
     });
 
     const progressListener = (offlineRegion, status) => {
@@ -76,11 +77,17 @@ export default class Home extends Component {
     getDirections(data)
   }
 
-  jumpToSector () {
-    console.log(!!this._map)
-    if (this._map) {
+  async jumpToSector () {
+    if (!this.state.movingMap) {
+      this.setState({
+        movingMap: true
+      })
       const center = centroid(this.props.store.config.sector.limites)
-      this._map.moveTo(center.coordinates)
+      await this._map.flyTo(center.geometry.coordinates)
+      await this._map.zoomTo(14)
+      this.setState({
+        movingMap: false
+      })
     }
   }
 
@@ -131,7 +138,7 @@ export default class Home extends Component {
       return (
           <View style={{flex: 1}}>
             <MapboxGL.MapView
-                ref={(child) => { this._map = child; }}
+                ref={(child) => { this._map = child }}
                 showUserLocation={true}
                 zoomLevel={12}
                 centerCoordinate={[-70.687692,19.451361]}
@@ -148,7 +155,7 @@ export default class Home extends Component {
             </MapboxGL.MapView>
             <View style={[styles.container, styles.bottomBar]}>
               <View style={{justifyContent: 'center', alignItems: 'center', flexGrow: 1}}>
-                <TouchableHighlight onPress={this.jumpToSector}>
+                <TouchableHighlight underlayColor={'transparent'} activeOpacity={0.7} onPress={this.jumpToSector}>
                   <Text style={styles.textTop}>{store.config.sector.nombre}</Text>
                 </TouchableHighlight>
                 <Text style={styles.textBottom}>
