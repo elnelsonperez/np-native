@@ -1,6 +1,6 @@
 
-import { observable, action, computed, extendObservable } from 'mobx';
-import {Bluetooth, Events} from './../components/Bluetooth/BluetoothModule'
+import { observable, action, computed } from 'mobx';
+import {Bluetooth} from './../components/Bluetooth/BluetoothModule'
 import BtMessage from "../core/BtMessage";
 import moment from 'moment'
 
@@ -10,6 +10,7 @@ class store {
   @observable bluetoothStatus = null;
   @observable bluetoothAdapterStatus = null;
   @observable config = null
+  @observable unreadMessagesCount = 0
 
   @action setBluetoothStatus (status) {
     this.bluetoothStatus = status
@@ -53,7 +54,12 @@ class store {
         old.push(parsed)
       }
     }
+    this.unreadMessagesCount = mensajes.length
     this.mensajes.replace(old);
+  }
+
+  @action resetUnread () {
+    this.unreadMessagesCount = 0;
   }
 
   @action receiveServerIncidencias (incidencias) {

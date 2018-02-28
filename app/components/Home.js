@@ -129,8 +129,15 @@ export default class Home extends Component {
                 style={{flex:1}} >
               {this.renderAnnotations()}
             </MapboxGL.MapView>
-            <View style={styles.container}>
-              <Button onPress={this.handleGetDirections} title="Obtener direcciones" />
+            <View style={[styles.container, styles.bottomBar]}>
+              <View style={styles.bottomLeft}>
+                <Text style={styles.textTop}>El Embrujo I</Text>
+                <Text style={styles.textBottom}> Sector asignado</Text>
+              </View>
+              <View style={styles.bottomRight}>
+                <Text style={styles.textTop}>El Embrujo I</Text>
+                <Text style={styles.textBottom}> Sector asignado</Text>
+              </View>
             </View>
           </View>
       );
@@ -139,8 +146,35 @@ export default class Home extends Component {
 
 }
 
-
 const styles = StyleSheet.create({
+  bottomLeft: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexGrow: 1
+  },
+  bottomRight: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexGrow: 1
+  },
+  textTop: {
+    color: '#FCFCFC',
+    fontSize: 18,
+    fontWeight:"500"
+  },
+  textBottom: {
+    color: '#FCFCFC',
+    fontSize: 10
+  },
+  bottomBar: {
+    flexDirection: 'row',
+    paddingLeft: 5,
+    paddingRight: 5,
+    flexBasis: 45,
+    backgroundColor: '#1976D2',
+    borderTopColor: '#FCFCFC',
+    borderTopWidth: 2,
+  },
   noPermissionsText: {
     fontSize: 18,
     fontWeight: 'bold',

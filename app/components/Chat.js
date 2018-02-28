@@ -5,18 +5,19 @@ import {observer,inject} from 'mobx-react'
 // import {autorun} from 'mobx'
 import {Send} from 'react-native-gifted-chat'
 import Snackbar from 'react-native-snackbar';
-
 @inject('store')
 @observer
 export default class Chat extends Component {
   constructor (props) {
     super(props);
     this.renderSend = this.renderSend.bind(this)
+    this.sortMessages = this.sortMessages.bind(this)
     this.avatarPressed = this.avatarPressed.bind(this)
   }
 
-  componentWillMount() {
 
+  componentDidMount () {
+    this.props.store.resetUnread()
   }
 
   onSend(mensajes = []) {
@@ -40,17 +41,22 @@ export default class Chat extends Component {
     });
   }
 
+  sortMessages (array) {
+    return array.sort((a,b) => {
+      return b.createdAt - a.createdAt
+    })
+  }
+
   render() {
     let toRender =
         <View style={{ flex: 1 , justifyContent: "center", alignItems:"center"}}>
           <Text style={{color: '#1976D2', fontSize: 17}}>Cargando mensajes...</Text>
         </View>
 
-
     if (this.props.store.mensajes.length > 0) {
       toRender =
           <GiftedChat
-              messages={this.props.store.mensajes.slice()}
+              messages={this.sortMessages(this.props.store.mensajes.slice())}
               placeholder={"Escriba su mensaje..."}
               renderSend={this.renderSend}
               onSend={messages => this.onSend(messages)}
