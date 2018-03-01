@@ -49,7 +49,7 @@ export default class Home extends Component {
     // await MapboxGL.offlineManager.deletePack('local')
     const offlinePacks = await MapboxGL.offlineManager.getPacks();
     const pack = offlinePacks.find(v => v._metadata.name === "local")
-    console.log(offlinePacks,pack)
+    console.log(offlinePacks, pack)
     if (pack) {
       this.setState({
         mapDownloaded: true

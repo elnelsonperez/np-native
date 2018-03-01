@@ -10,7 +10,6 @@ class store {
   @observable bluetoothStatus = null;
   @observable bluetoothAdapterStatus = null;
   @observable config = null
-  @observable unreadMessagesCount = 0
 
   @action setBluetoothStatus (status) {
     this.bluetoothStatus = status
@@ -108,10 +107,11 @@ class store {
         old.push(parsed)
       }
     }
+    this.mensajes.replace(old);
 
     //Mensajes del servidor al hub con estado Enviado
     const mensajesConEstadoEnviado = mensajes.filter(
-        v => v.estado_mensaje_hub_id === 1 && v.user._id !== this.config.oficial.id);
+        v => v.estado_mensaje_hub_id === 1 && v.sentido === 0);
 
     if (mensajesConEstadoEnviado.length > 0) {
       Bluetooth.sendMessage(
@@ -126,9 +126,8 @@ class store {
           ))
     }
 
-    this.mensajes.replace(old);
     this.unreadMessagesCount =
-        this.mensajes.filter( v => v.user._id !== this.config.oficial.id).length
+        this.mensajes.filter( v => v.user._id !== this.config.oficial.id && v.read !== true).length
   }
 
   @action markUnreadMessagesAsRead () {
@@ -139,7 +138,7 @@ class store {
               {
                 type: "UPDATE_MESSAGES_STATUS",
                 payload: {
-                  mensajes: mensajes.slice(),
+                  mensajes_ids: mensajes.slice().map(v => v._id),
                   estado_id: 2
                 }
               }
@@ -164,6 +163,13 @@ class store {
     this.incidencias.replace(old);
   }
 
+  @computed unreadMessagesCount () {
+   return this.mensajes.filter(
+        m => {
+          return m.read && m.read === false && m.user._id !== this.userId
+        }
+    ).length
+  }
   @computed get userId() {
     if (this.config)
       return this.config.oficial.id
