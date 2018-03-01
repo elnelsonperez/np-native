@@ -20,72 +20,38 @@ class store {
     this.bluetoothAdapterStatus = status
   }
 
-  @action appendMessage (serverResponseMessage) {
-    const chatmsg = this.parseSentMessageResponse(serverResponseMessage.mensaje)
-    const old = this.mensajes.slice()
-    const existing = old.findIndex(v => v._id === serverResponseMessage.tmp_id)
-    if (existing !== -1) {
-      old[existing] = chatmsg;
-      this.mensajes.replace(old);
-    }
-  }
-
-  parseSentMessageResponse (mensaje) {
-    return {
-      _id: mensaje.id,
-      text: mensaje.contenido,
-      createdAt:  moment(mensaje.creado_en).toDate(),
-      received: true,
-      sent: true,
-      user: {
-        _id: this.config.oficial.id
-      },
-    };
-  }
-
-  @action receiveServerMessages (mensajes) {
-    const old = this.mensajes.slice()
-    for (let m of mensajes) {
-      const parsed = this.parseServerMessage(m);
-      const existing = old.findIndex(v => v._id === m.id)
+  @action sendMessageToServerResponse ({mensaje, tmp_id, status, callPayload}) {
+    if (status === "OK") {
+      const chatmsg = this.parseServerMessage(serverResponseMessage.mensaje)
+      const old = this.mensajes.slice()
+      const existing = old.findIndex(v => v._id === serverResponseMessage.tmp_id)
       if (existing !== -1) {
-        old[existing] = parsed;
-      } else {
-        old.push(parsed)
+        old[existing] = chatmsg;
+        this.mensajes.replace(old);
       }
+    } else if (status === "FAILED"){
+      Bluetooth.sendMessage(
+          new BtMessage(
+              {
+                type: "SEND_MESSAGE_TO_SERVER",
+                payload: callPayload
+              }
+          ))
     }
-    this.mensajes.replace(old);
-    this.unreadMessagesCount =
-        this.mensajes.filter( v => v.user._id !== this.config.oficial.id).length
-  }
-
-  @action resetUnread () {
-    this.unreadMessagesCount = 0;
-  }
-
-  @action receiveServerIncidencias (incidencias) {
-    const old = this.incidencias.slice()
-    for (let i of incidencias) {
-      const existing = old.findIndex(v => v.id === i.id)
-      if (existing !== -1) {
-        old[existing] = i;
-      } else {
-        old.push(i)
-      }
-    }
-    this.incidencias.replace(old);
   }
 
   parseServerMessage (mensaje) {
-
     const d = moment(mensaje.creado_en).toDate();
-    if (mensaje.sentido === 0) {
+    const read = mensaje.estado_mensaje_hub_id === 2;
+    const received = read || mensaje.estado_mensaje_hub_id === 3;
+    if (mensaje.sentido === 0) { //Cuartel a unidad
       return {
         _id: mensaje.id,
         text: mensaje.contenido,
         createdAt: d,
-        received: true,
-        sent: true,
+        received: received,
+        sent: true, //At this point the message has been sent
+        read: read,
         user: {
           _id: mensaje.remitente.id,
           name: mensaje.remitente.nombre + " " + mensaje.remitente.apellido
@@ -96,8 +62,9 @@ class store {
         _id: mensaje.id,
         text: mensaje.contenido,
         createdAt: d,
-        received: true,
+        received: received,
         sent: true,
+        read: read,
         user: {
           _id: mensaje.oficial_unidad_id,
           name: mensaje.oficial_unidad.nombre + " " + mensaje.oficial_unidad.apellido
@@ -105,6 +72,96 @@ class store {
       };
     }
 
+  }
+
+  @action updateMessagesStatusResponse ({status, callPayload}) {
+    if (status === 'OK') {
+      const read = callPayload.estado_id === 2;
+      const received = read || callPayload.estado_id === 3;
+      const old = this.mensajes.slice()
+      for (let m of old) {
+        if (callPayload.mensajes_ids.includes(m.id)) {
+          m.read = read;
+          m.received = received;
+        }
+      }
+      this.mensajes.replace(old);
+    } else if (status === "FAILED"){
+      Bluetooth.sendMessage(
+          new BtMessage(
+              {
+                type: "UPDATE_MESSAGES_STATUS",
+                payload: callPayload
+              }
+          ))
+    }
+  }
+
+  @action newServerMessages (mensajes) {
+    const old = this.mensajes.slice()
+    for (let m of mensajes) {
+      const parsed = this.parseServerMessage(m);
+      const existing = old.findIndex(v => v._id === m.id)
+      if (existing !== -1) {
+        old[existing] = parsed;
+      } else {
+        old.push(parsed)
+      }
+    }
+
+    //Mensajes del servidor al hub con estado Enviado
+    const mensajesConEstadoEnviado = mensajes.filter(
+        v => v.estado_mensaje_hub_id === 1 && v.user._id !== this.config.oficial.id);
+
+    if (mensajesConEstadoEnviado.length > 0) {
+      Bluetooth.sendMessage(
+          new BtMessage(
+              {
+                type: "UPDATE_MESSAGES_STATUS",
+                payload: {
+                  mensajes_ids: mensajesConEstadoEnviado.slice().map(v => v.id),
+                  estado_id: 3
+                }
+              }
+          ))
+    }
+
+    this.mensajes.replace(old);
+    this.unreadMessagesCount =
+        this.mensajes.filter( v => v.user._id !== this.config.oficial.id).length
+  }
+
+  @action markUnreadMessagesAsRead () {
+    const mensajes = this.mensajes.filter(v => v.read === false && v.user._id !== this.config.oficial.id);
+    if (mensajes.length > 0) {
+      Bluetooth.sendMessage(
+          new BtMessage(
+              {
+                type: "UPDATE_MESSAGES_STATUS",
+                payload: {
+                  mensajes: mensajes.slice(),
+                  estado_id: 2
+                }
+              }
+          ))
+    }
+  }
+
+  @action resetUnread () {
+    this.unreadMessagesCount = 0;
+  }
+
+  @action newServerIncidencias (incidencias) {
+    const old = this.incidencias.slice()
+    for (let i of incidencias) {
+      const existing = old.findIndex(v => v.id === i.id)
+      if (existing !== -1) {
+        old[existing] = i;
+      } else {
+        old.push(i)
+      }
+    }
+    this.incidencias.replace(old);
   }
 
   @computed get userId() {
@@ -133,14 +190,13 @@ class store {
         ))
   }
 
-  @action setDeviceConfig (config) {
+  @action getDeviceConfigResponse (config) {
     this.config = config;
   }
 
   @action sendMessagesToServer (chatMessages) {
-
     chatMessages.forEach(v => {
-      this.mensajes.push({...v,...{sent: true}})
+      this.mensajes.push({...v,...{sent: true,received: false, read: false}})
       Bluetooth.sendMessage(
           new BtMessage(
               {

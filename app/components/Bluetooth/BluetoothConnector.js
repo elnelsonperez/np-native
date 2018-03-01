@@ -26,16 +26,16 @@ export default class BluetoothConnector extends React.Component {
       const data = JSON.parse(e)
       switch (data.type) {
         case "GET_DEVICE_CONFIG_RESPONSE":
-          store.setDeviceConfig(data.payload)
+          store.getDeviceConfigResponse(data.payload)
           break
         case "SEND_MESSAGE_TO_SERVER_RESPONSE":
-          store.appendMessage(data.payload)
+          store.sendMessageToServerResponse(data.payload)
           break
         case "NEW_SERVER_MESSAGES":
-          store.receiveServerMessages(data.payload)
+          store.newServerMessages(data.payload)
           break
         case "NEW_SERVER_INCIDENCIAS":
-          store.receiveServerIncidencias(data.payload)
+          store.newServerIncidencias(data.payload)
           break
       }
     })

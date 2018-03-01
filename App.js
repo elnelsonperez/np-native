@@ -57,6 +57,7 @@ const AppContent = TabNavigator({
       },
       tabBarOnPress: ({jumpToIndex,scene}) => {
         store.resetUnread()
+        store.markUnreadMessagesAsRead()
         jumpToIndex(scene.index)
       }
     }
