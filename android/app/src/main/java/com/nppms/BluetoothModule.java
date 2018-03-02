@@ -12,14 +12,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import com.facebook.react.bridge.ActivityEventListener;
-import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.BaseActivityEventListener;
-import com.facebook.react.bridge.Promise;
-import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactContextBaseJavaModule;
-import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.*;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.github.douglasjunior.bluetoothclassiclibrary.BluetoothClassicService;
 import com.github.douglasjunior.bluetoothclassiclibrary.BluetoothConfiguration;
@@ -159,6 +152,25 @@ public class BluetoothModule extends ReactContextBaseJavaModule {
         config.uuid = BT_UUID;
         BluetoothService.init(config);
         final BluetoothService service = BluetoothService.getDefaultInstance();
+
+        getReactApplicationContext().addLifecycleEventListener(new LifecycleEventListener() {
+            @Override
+            public void onHostResume() {
+
+            }
+
+            @Override
+            public void onHostPause() {
+
+            }
+
+            @Override
+            public void onHostDestroy() {
+                service.stopScan();
+                service.stopService();
+            }
+        });
+
         bluetoothServiceInstance = service;
         btWriterInstance = new BluetoothWriter(bluetoothServiceInstance);
 

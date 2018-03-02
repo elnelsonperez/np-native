@@ -47,6 +47,8 @@
             </intent-filter>
         </receiver>
         <service android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationRegistrationService"/>
+        <service android:name="com.github.douglasjunior.bluetoothclassiclibrary.BluetoothClassicService"
+                 android:stopWithTask="true"/>
         <service
                 android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerService"
                 android:exported="false" >
