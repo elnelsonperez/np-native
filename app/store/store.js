@@ -21,9 +21,11 @@ class store {
 
   @action sendMessageToServerResponse ({mensaje, tmp_id, status, callPayload}) {
     if (status === "OK") {
-      const chatmsg = this.parseServerMessage(serverResponseMessage.mensaje)
+
+      const chatmsg = this.parseServerMessage(mensaje)
+
       const old = this.mensajes.slice()
-      const existing = old.findIndex(v => v._id === serverResponseMessage.tmp_id)
+      const existing = old.findIndex(v => v._id === tmp_id)
       if (existing !== -1) {
         old[existing] = chatmsg;
         this.mensajes.replace(old);
@@ -100,6 +102,7 @@ class store {
     const old = this.mensajes.slice()
     for (let m of mensajes) {
       const parsed = this.parseServerMessage(m);
+
       const existing = old.findIndex(v => v._id === m.id)
       if (existing !== -1) {
         old[existing] = parsed;
@@ -125,9 +128,6 @@ class store {
               }
           ))
     }
-
-    this.unreadMessagesCount =
-        this.mensajes.filter( v => v.user._id !== this.config.oficial.id && v.read !== true).length
   }
 
   @action markUnreadMessagesAsRead () {
@@ -163,10 +163,10 @@ class store {
     this.incidencias.replace(old);
   }
 
-  @computed unreadMessagesCount () {
+  @computed get unreadMessagesCount () {
    return this.mensajes.filter(
         m => {
-          return m.read && m.read === false && m.user._id !== this.userId
+          return m.hasOwnProperty('read') && m.read === false && m.user._id !== this.userId
         }
     ).length
   }

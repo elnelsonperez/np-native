@@ -8,18 +8,23 @@ import Snackbar from 'react-native-snackbar';
 @inject('store')
 @observer
 export default class Chat extends Component {
+
   constructor (props) {
     super(props);
     this.renderSend = this.renderSend.bind(this)
     this.sortMessages = this.sortMessages.bind(this)
     this.avatarPressed = this.avatarPressed.bind(this)
-
     this._disposer = autorun(() => {
-
-      if (unread.length > 0) {
-        this.props.store.markUnreadMessagesAsRead()
+      if (this.props.navigation.state.key === "Mensajes") {
+        if (this.props.store.unreadMessagesCount > 0) {
+          this.props.store.markUnreadMessagesAsRead()
+        }
       }
     })
+  }
+
+  componentWillUnmount () {
+    this._disposer()
   }
 
   onSend(mensajes = []) {
