@@ -83,7 +83,7 @@ class App extends Component  {
       hamburgerIcon: null,
       ready: false
     };
-    Icon.getImageSource("bars", 22,"#FCFCFC").then((source) => this.setState({ hamburgerIcon: source }));
+    // Icon.getImageSource("bars", 22,"#FCFCFC").then((source) => this.setState({ hamburgerIcon: source }));
   }
 
   componentDidMount () {

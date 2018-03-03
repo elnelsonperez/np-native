@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Overlay from './IncidenteOverlay'
 import { Text , StyleSheet,Button, View,TouchableHighlight} from 'react-native';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
 import * as Progress from 'react-native-progress';
@@ -138,7 +139,8 @@ export default class Home extends Component {
       )
     } else {
       return (
-          <View style={{flex: 1}}>
+          <View style={{flex: 1, position: 'relative'}}>
+            <Overlay/>
             <MapboxGL.MapView
                 ref={(child) => { this._map = child }}
                 showUserLocation={true}
