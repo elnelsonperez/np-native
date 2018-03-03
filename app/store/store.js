@@ -163,6 +163,18 @@ class store {
     this.incidencias.replace(old);
   }
 
+  @computed get nextPendingIncidencia () {
+    const incidencias = this.incidencias.filter(i => {
+      return i.estado_id === 3
+    }).sort((a,b) => {
+      return a.id - b.id
+    })
+    if (incidencias.length > 0){
+      return incidencias[0]
+    }
+    return null
+  }
+
   @computed get unreadMessagesCount () {
    return this.mensajes.filter(
         m => {

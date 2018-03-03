@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {View, Text,StyleSheet, Button, Animated, Alert} from 'react-native'
+import PropTypes from 'prop-types';
 
 class IncidenteOverlay extends Component {
 
@@ -45,9 +46,10 @@ class IncidenteOverlay extends Component {
   }
 
   render () {
+    const {incidente} = this.props;
     return (
         <Animated.View style={[styles.wrapper, {opacity: this.state.fadeAnim, height: this.state.rollAnim}]}>
-          <Text style={{fontSize: 16}}>Test</Text>
+          <Text style={{fontSize: 16}}>Incidente #{incidente.id}</Text>
           <View style={styles.buttons}>
             <View style={{flexGrow: 1, marginRight:5}}>
               <Button onPress={() => {this.cancelPressed()}} title={"Rechazar"} color={'#C4351C'}  />
@@ -78,5 +80,9 @@ const styles = StyleSheet.create({
     padding: 5
   }
 })
+
+IncidenteOverlay.proptypes = {
+  incidente: PropTypes.object.isRequired
+}
 
 export default IncidenteOverlay;

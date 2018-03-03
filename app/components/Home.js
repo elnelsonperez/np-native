@@ -134,13 +134,12 @@ export default class Home extends Component {
                   showsText={true}
                   progress={this.state.downloadProgress}/>
             </View>
-
           </View>
       )
     } else {
       return (
           <View style={{flex: 1, position: 'relative'}}>
-            <Overlay/>
+            {store.nextPendingIncidencia !== null && <Overlay incidente={store.nextPendingIncidencia} />}
             <MapboxGL.MapView
                 ref={(child) => { this._map = child }}
                 showUserLocation={true}
