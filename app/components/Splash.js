@@ -26,9 +26,9 @@ export default class Splash extends Component {
               this.setState({statusText: "Esperando configs"})
               if (store.config) {
                 this.setState({statusText: "Configuracion cargada"})
-                setTimeout((() => {
+
                   this.props.onReady()
-                }),1000)
+
               } else {
                 store.sendConfigRequest()
               }

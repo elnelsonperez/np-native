@@ -3,13 +3,15 @@ import { observable, action, computed } from 'mobx';
 import {Bluetooth} from './../components/Bluetooth/BluetoothModule'
 import BtMessage from "../core/BtMessage";
 import moment from 'moment'
+import {Incidencia} from './../shared'
 
 class store {
   @observable mensajes = []
   @observable incidencias = []
-  @observable bluetoothStatus = null;
-  @observable bluetoothAdapterStatus = null;
+  @observable bluetoothStatus = null
+  @observable bluetoothAdapterStatus = null
   @observable config = null
+  @observable updatingIncidenciaStatus = false
 
   @action setBluetoothStatus (status) {
     this.bluetoothStatus = status
@@ -17,6 +19,49 @@ class store {
 
   @action setBluetoothAdapterStatus (status) {
     this.bluetoothAdapterStatus = status
+  }
+
+  @action sendUpdateIncidenteStatus (estado_id, incidencia_id) {
+    Bluetooth.sendMessage(
+        new BtMessage(
+            {
+              type: "UPDATE_INCIDENCIA_STATUS",
+              payload: {
+                estado_id,
+                incidencia_id
+              }
+            }
+        ))
+    this.updatingIncidenciaStatus = true;
+  }
+
+  @action updateIncidenciaStatusResponse ({status,incidencia, callPayload}) {
+    if (status === 'OK') {
+      this.newServerIncidencias([incidencia])
+      this.updatingIncidenciaStatus = false;
+    } else if (status === "FAILED"){
+      Bluetooth.sendMessage(
+          new BtMessage(
+              {
+                type: "UPDATE_INCIDENCIA_STATUS",
+                payload: callPayload
+              }
+          ))
+    }
+  }
+
+
+  @action newServerIncidencias (incidencias) {
+    const old = this.incidencias.slice()
+    for (let i of incidencias) {
+      const existing = old.findIndex(v => v.id === i.id)
+      if (existing !== -1) {
+        old[existing] = i;
+      } else {
+        old.push(i)
+      }
+    }
+    this.incidencias.replace(old);
   }
 
   @action sendMessageToServerResponse ({mensaje, tmp_id, status, callPayload}) {
@@ -150,22 +195,21 @@ class store {
     this.unreadMessagesCount = 0;
   }
 
-  @action newServerIncidencias (incidencias) {
-    const old = this.incidencias.slice()
-    for (let i of incidencias) {
-      const existing = old.findIndex(v => v.id === i.id)
-      if (existing !== -1) {
-        old[existing] = i;
-      } else {
-        old.push(i)
-      }
-    }
-    this.incidencias.replace(old);
-  }
-
   @computed get nextPendingIncidencia () {
     const incidencias = this.incidencias.filter(i => {
       return i.estado_id === 3
+    }).sort((a,b) => {
+      return a.id - b.id
+    })
+    if (incidencias.length > 0){
+      return incidencias[0]
+    }
+    return null
+  }
+
+  @computed get activeIncidencia () {
+    const incidencias = this.incidencias.filter(i => {
+      return i.estado_id === Incidencia.EN_CURSO
     }).sort((a,b) => {
       return a.id - b.id
     })

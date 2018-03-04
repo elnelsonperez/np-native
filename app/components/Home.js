@@ -3,11 +3,15 @@ import Overlay from './IncidenteOverlay'
 import { Text , StyleSheet,Button, View,TouchableHighlight} from 'react-native';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
 import * as Progress from 'react-native-progress';
+import {Incidencia} from './../shared'
+import moment from 'moment'
 MapboxGL.setAccessToken(
     'sk.eyJ1IjoiZWxuZWxzb25wZXJleiIsImEiOiJjamR6N3c2ZWg0bWV1MzNxcHhuMHFxN3BkIn0.YIqeih5lO_YU43ZHTS1v3A');
 import getDirections from 'react-native-google-maps-directions'
 import {inject, observer} from "mobx-react";
+import {autorun} from "mobx";
 import centroid from '@turf/centroid'
+import midpoint from '@turf/midpoint'
 @inject('store')
 @observer
 export default class Home extends Component {
@@ -18,11 +22,52 @@ export default class Home extends Component {
       isFetchingAndroidPermission: false,
       isAndroidPermissionGranted: false,
       activeExample: -1,
+      currentIncidenciaTimeSince: null
     };
     this.handleGetDirections = this.handleGetDirections.bind(this)
     this.jumpToSector = this.jumpToSector.bind(this)
   }
 
+  componentWillUnmount () {
+    this._dispose()
+    clearInterval(this._timeout)
+  }
+
+  componentDidMount () {
+    const {store} = this.props
+    this._dispose = autorun (() => {
+      if (store.nextPendingIncidencia !== null && store.activeIncidencia === null) {
+        navigator.geolocation.getCurrentPosition(async res => {
+          const p1 = [res.coords.longitude, res.coords.latitude]
+          const p2 = store.nextPendingIncidencia.ubicacion.coordinates.slice();
+          const center = midpoint(p1,p2)
+          await this._map.flyTo(center.geometry.coordinates, 300)
+          await this._map.zoomTo(12,300)
+        })
+      }
+    })
+
+    this._timeout =  setInterval(() => {
+      if (store.nextPendingIncidencia !== null || store.activeIncidencia !== null) {
+        let inci = null;
+        if (store.activeIncidencia) {
+          inci = store.activeIncidencia
+        } else {
+          inci = store.nextPendingIncidencia
+        }
+        const duration = moment.duration(moment().diff(moment(inci.fecha_incidencia)));
+        const tiempo = moment.utc(duration.asMilliseconds()).format("HH:mm:ss");
+        this.setState ({
+          currentIncidenciaTimeSince: tiempo
+        })
+      } else {
+        this.setState ( {
+          currentIncidenciaTimeSince: null
+        })
+      }
+    }, 1000);
+
+  }
   async componentWillMount() {
     const isGranted = await MapboxGL.requestAndroidLocationPermissions();
     this.setState({
@@ -34,7 +79,6 @@ export default class Home extends Component {
     });
 
     const progressListener = (offlineRegion, status) => {
-      console.log(status)
       this.setState({
         downloadProgress: status.percentage/100
       })
@@ -50,7 +94,6 @@ export default class Home extends Component {
     // await MapboxGL.offlineManager.deletePack('local')
     const offlinePacks = await MapboxGL.offlineManager.getPacks();
     const pack = offlinePacks.find(v => v._metadata.name === "local")
-    console.log(offlinePacks, pack)
     if (pack) {
       this.setState({
         mapDownloaded: true
@@ -68,13 +111,13 @@ export default class Home extends Component {
   }
 
   handleGetDirections () {
+    const {store} = this.props
     const data = {
       destination: {
-        latitude: 19.459881,
-        longitude: -70.661594
+        latitude: store.activeIncidencia.ubicacion.coordinates[1],
+        longitude: store.activeIncidencia.ubicacion.coordinates[0],
       }
     }
-
     getDirections(data)
   }
 
@@ -94,18 +137,34 @@ export default class Home extends Component {
 
   renderIncidencias () {
     return this.props.store.incidencias.map(i => {
+      return this.renderIncidencia(i)
+    })
+  }
+
+  renderIncidencia (i) {
+    if (i.estado_id === Incidencia.EN_CURSO ||
+        i.estado_id === Incidencia.ASIGNADA
+    ) {
+      let color = '#e51b11';
+      if (i.estado_id === Incidencia.EN_CURSO) {
+        color = "#58a721"
+      }
+
       return (
           <MapboxGL.PointAnnotation
               key={i.id}
               id={i.id.toString()}
+              selected={false}
               coordinate={i.ubicacion.coordinates.slice()}>
             <View style={styles.annotationContainer}>
-              <View style={styles.annotationFill} />
+              <View style={[styles.annotationFill, {backgroundColor: color}]} />
             </View>
-            {/*<MapboxGL.Callout selected={true} title='#35 Tiempo: 00:35:00' />*/}
+            <MapboxGL.Callout  title={'Tiempo: '+this.state.currentIncidenciaTimeSince} />
           </MapboxGL.PointAnnotation>
       )
-    })
+    }
+    return false
+
   }
 
   render() {
@@ -136,14 +195,27 @@ export default class Home extends Component {
             </View>
           </View>
       )
-    } else {
+    }
+    else {
       return (
           <View style={{flex: 1, position: 'relative'}}>
-            {store.nextPendingIncidencia !== null && <Overlay incidente={store.nextPendingIncidencia} />}
+
+            {store.nextPendingIncidencia !== null &&
+            store.activeIncidencia === null &&
+            <Overlay incidente={store.nextPendingIncidencia} active={false}/>}
+
+            {store.activeIncidencia !== null &&
+            <Overlay incidente={store.activeIncidencia} active={true}
+                     time={this.state.currentIncidenciaTimeSince}/>
+            }
+
             <MapboxGL.MapView
                 ref={(child) => { this._map = child }}
                 showUserLocation={true}
                 zoomLevel={12}
+                minZoomLevel={2}
+                maxZoomLevel={20}
+                compassEnabled={true}
                 centerCoordinate={[-70.687692,19.451361]}
                 userTrackingMode={MapboxGL.UserTrackingModes.Follow}
                 rotateEnabled={false}
@@ -156,6 +228,23 @@ export default class Home extends Component {
                     id='fill-poly'/>
               </MapboxGL.Animated.ShapeSource>
             </MapboxGL.MapView>
+
+
+            {store.activeIncidencia &&
+            <View style={[styles.container, styles.bottomBar, {backgroundColor: "#58a721"}]}>
+              <View style={{justifyContent: 'center', alignItems: 'center', flexGrow: 1}}>
+                <TouchableHighlight underlayColor={'transparent'} activeOpacity={0.7}
+                                    onPress={this.handleGetDirections}>
+                  <Text style={styles.textTop}>Obtener direcciones a incidente</Text>
+                </TouchableHighlight>
+                <Text style={styles.textBottom}>
+                  Con Google Maps
+                </Text>
+              </View>
+            </View>
+            }
+
+            {!store.activeIncidencia &&
             <View style={[styles.container, styles.bottomBar]}>
               <View style={{justifyContent: 'center', alignItems: 'center', flexGrow: 1}}>
                 <TouchableHighlight underlayColor={'transparent'} activeOpacity={0.7} onPress={this.jumpToSector}>
@@ -166,7 +255,10 @@ export default class Home extends Component {
                 </Text>
               </View>
             </View>
+            }
           </View>
+
+
       );
     }
   }

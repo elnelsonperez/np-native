@@ -210,6 +210,13 @@
     "@turf/helpers" "^5.1.5"
     "@turf/meta" "^5.1.5"
 
+"@turf/centroid@latest":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@turf/centroid/-/centroid-6.0.0.tgz#f2220cca5dd90b37b10ad3a03b5c240d922edab8"
+  dependencies:
+    "@turf/helpers" "6.x"
+    "@turf/meta" "6.x"
+
 "@turf/circle@5.1.x", "@turf/circle@^5.1.5":
   version "5.1.5"
   resolved "https://registry.yarnpkg.com/@turf/circle/-/circle-5.1.5.tgz#9b1577835508ab52fb1c10b2a5065cba2b87b6a5"
@@ -578,7 +585,7 @@
     "@turf/union" "^5.1.5"
     rbush "^2.0.1"
 
-"@turf/meta@*":
+"@turf/meta@*", "@turf/meta@6.x":
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/@turf/meta/-/meta-6.0.1.tgz#cf6f3f2263a3d24fc8d6a7e90f0420bbc44c090d"
   dependencies:
@@ -4983,6 +4990,12 @@ react-devtools@^3.1.0:
 react-native-background-timer@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/react-native-background-timer/-/react-native-background-timer-2.0.0.tgz#afdac10b7441952d570acea4a8dbb065107b5461"
+
+react-native-collapsible@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/react-native-collapsible/-/react-native-collapsible-0.10.0.tgz#3a3db2685ea4ff1b25812840e719f1225e412936"
+  dependencies:
+    prop-types "^15.5.10"
 
 react-native-communications@2.2.1:
   version "2.2.1"
