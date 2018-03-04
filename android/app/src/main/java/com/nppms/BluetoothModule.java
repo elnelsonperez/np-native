@@ -235,6 +235,13 @@ public class BluetoothModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void stopBluetoothService() {
+        BluetoothService.getDefaultInstance().disconnect();
+        BluetoothService.getDefaultInstance().stopScan();
+        BluetoothService.getDefaultInstance().stopService();
+    }
+
+    @ReactMethod
     private void searchForNpModule() {
         if (!isServiceRunning(BluetoothClassicService.class)) {
             initializeBluetoothService();

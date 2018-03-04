@@ -6,6 +6,8 @@ import * as Progress from 'react-native-progress';
 import {inject, observer} from "mobx-react";
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Collapsible from 'react-native-collapsible';
+import moment from 'moment'
+
 const Field = props => {
   return (
       <View>
@@ -51,8 +53,8 @@ class IncidenteOverlay extends Component {
 
   cancelPressed() {
     Alert.alert(
-        'Confirmacion de rechazo',
-        'Esta seguro que quiere rechazar la incidencia?',
+        'Confirmación de rechazo',
+        '¿Esta seguro que quiere rechazar la incidencia?',
         [
           {
             text: 'NO', onPress: () => {
@@ -72,6 +74,26 @@ class IncidenteOverlay extends Component {
   acceptPressed() {
     this.props.store.sendUpdateIncidenteStatus(
         Incidencia.EN_CURSO, this.props.store.nextPendingIncidencia.id)
+  }
+
+  marcarComoCompletadoPressed () {
+    Alert.alert(
+        'Confirmación',
+        '¿Esta seguro que quiere marcar este incidente como completado?',
+        [
+          {
+            text: 'NO', onPress: () => {
+            }, style: 'cancel'
+          },
+          {
+            text: 'SI', onPress: () => {
+              this.props.store.sendUpdateIncidenteStatus(
+                  Incidencia.RESUELTA, this.props.store.activeIncidencia.id)
+            }
+          },
+        ],
+        {cancelable: true}
+    )
   }
 
   render() {
@@ -95,18 +117,21 @@ class IncidenteOverlay extends Component {
     } else {
       if (active) {
         return (
-            <View style={[styles.wrapper, {height: 230}]}>
-              <View style={[styles.content, {height: this.state.collapsed ? 35 : 180}]}>
+            <View style={[styles.wrapper]}>
+              <View style={[styles.content, {height: this.state.collapsed ? 35 : '100%'}]}>
                 <TouchableOpacity onPress={() => {
                   this.setState({collapsed: !this.state.collapsed})
                 }}>
                   <View style={{ flexDirection: 'row'}}>
                     <View style={{flexGrow: 2}}>
                       <Text style={{fontSize: 16, fontWeight: "500", color: "#58a721"}}>
-                        Incidente en curso
+                        {this.state.collapsed && <Icon name={"arrow-circle-o-right"} size={15} />}
+                        {!this.state.collapsed && <Icon name={"arrow-circle-o-down"} size={15} />}
+                        {' '}
+                        INCIDENTE EN CURSO
                       </Text>
                     </View>
-                    <View style={{flexGrow: 1, alignItems: 'flex-end'}}>
+                    <View style={{flexGrow: 1, alignItems: 'flex-end', marginTop: 2}}>
                       <Text>
                         <Icon name={"clock-o"} size={15} />
                         {' '} {time}
@@ -114,11 +139,20 @@ class IncidenteOverlay extends Component {
                     </View>
                   </View>
                 </TouchableOpacity>
-                <Collapsible collapsed={this.state.collapsed}>
-                  <View style={{ borderTopColor: '#e0e0e0', borderTopWidth: 1 ,height: '100%' ,
-
-                   }}>
+                <Collapsible collapsed={this.state.collapsed} easing="sin">
+                  <View style={{ borderTopColor: '#e0e0e0',
+                    borderTopWidth: 1}}>
                     <View>
+                      <View style={styles.fieldRow}>
+                        <Field small={'Tipo'} big={incidente.tipo.nombre}/>
+                        <Field small={'Prioridad'} big={incidente.prioridad.nombre}/>
+                        <Field small={'Involucrados'} big={incidente.personas_involucradas}/>
+                      </View>
+                      <View style={styles.fieldRow}>
+                        <Field small={'Sector'} big={incidente.sector.nombre}/>
+                        <Field small={'Distancia'} big={incidente.distancia ? incidente.distancia : "N/A"}/>
+                        <Field small={'Tiempo'} big={incidente.tiempo ? incidente.tiempo : "N/A"}/>
+                      </View>
                       <View style={styles.fieldRow}>
                         <Field small={'Ubicacion'} big={incidente.ubicacion_texto}/>
                         <Field small={'Detalle de ubicacion'} big={incidente.detalle_ubicacion}/>
@@ -126,17 +160,37 @@ class IncidenteOverlay extends Component {
                       <View style={styles.fieldRow}>
                         <Field small={'Detalle del incidente'} big={incidente.detalle_incidente}/>
                       </View>
+                      <View style={styles.fieldRow}>
+                        <Field small={'Registrado por'} big={incidente.creador.oficial.nombre + ' '+ incidente.creador.oficial.apellido}/>
+                        <Field small={'Registrado en fecha'} big={moment(incidente.creado_en).format('HH-MM-YY hh:MM A')}/>
+                      </View>
+                      <View style={styles.fieldRow}>
+                        <Field small={'Nombre civil'} big={incidente.nombre_civil}/>
+                        <Field small={'Contacto civil'} big={incidente.telefono_civil}/>
+                        <Field small={'Fecha incidente'} big={moment(incidente.fecha_incidente).format('HH-MM-YY hh:MM A')}/>
+                      </View>
                     </View>
                     <View style={{
-                      justifyContent: 'center',
-                      flexDirection: 'row',
-                      position: 'absolute',
                       width: '100%',
-                      bottom: 20
+                      marginTop: 'auto'
                     }}>
-                      <TouchableOpacity>
-                        <Text style={{fontWeight: "500", fontSize: 15}}>Ver mas detalles</Text>
-                      </TouchableOpacity>
+                      {!this.state.collapsed &&
+                      <TouchableOpacity onPress={() => {this.marcarComoCompletadoPressed()}}>
+                        <View style={{
+                          width: '100%',
+                          padding: 5,
+                          backgroundColor: "#58a721",
+                          alignItems: 'center',
+                          marginTop: 10
+                        }}>
+                          <Text style={{
+                            fontWeight: "500",
+                            fontSize: 15,
+                            color: '#FCFCFC',
+                          }}>
+                            Marcar como Completado</Text>
+                        </View>
+                      </TouchableOpacity>}
                     </View>
                   </View>
                 </Collapsible>
@@ -145,7 +199,7 @@ class IncidenteOverlay extends Component {
         )
         //       <View style={styles.buttons} key={2}>
         //       <View style={{flexGrow: 1, marginLeft:2}}>
-        // <Button onPress={() => {}} title={"Marcar como Completado"} color={'#1976D2'}/>
+        // <Button onPress={(chamaca) => {}} title={"Marcar como Completado"} color={'#1976D2'}/>
         // </View>
         // </View>
       }
@@ -196,7 +250,7 @@ const styles = StyleSheet.create({
   fieldRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 10
+    marginTop: 10,
   },
   buttons: {
     flexDirection: 'row',
@@ -214,7 +268,7 @@ const styles = StyleSheet.create({
   content: {
     backgroundColor: "#FCFCFC",
     elevation: 3,
-    padding: 5,
+    padding: 8,
     height: 125
   }
 })

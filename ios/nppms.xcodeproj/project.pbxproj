@@ -52,6 +52,7 @@
 		28F0C6F4507B4D3193AC8856 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8B3E0C2040F64141817F1F0A /* SimpleLineIcons.ttf */; };
 		606E7D1552464A4BA6359FF5 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1B0A878E87C1448BA5F9742D /* Zocial.ttf */; };
 		BA4168CD00B8428F8D48474D /* libRNSnackbar.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4726A1985B8A4A949FF6DB70 /* libRNSnackbar.a */; };
+		64A231FDABED4836822D5502 /* libRNExitApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51FF5B49BD1343AE87C2DA73 /* libRNExitApp.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -299,6 +300,8 @@
 		1B0A878E87C1448BA5F9742D /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		D5D2C059DBA84DC6B6CE7DB6 /* RNSnackbar.xcodeproj */ = {isa = PBXFileReference; name = "RNSnackbar.xcodeproj"; path = "../node_modules/react-native-snackbar/ios/RNSnackbar.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		4726A1985B8A4A949FF6DB70 /* libRNSnackbar.a */ = {isa = PBXFileReference; name = "libRNSnackbar.a"; path = "libRNSnackbar.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		17B540005E3C44F7B51C26E8 /* RNExitApp.xcodeproj */ = {isa = PBXFileReference; name = "RNExitApp.xcodeproj"; path = "../node_modules/react-native-exit-app/ios/RNExitApp.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		51FF5B49BD1343AE87C2DA73 /* libRNExitApp.a */ = {isa = PBXFileReference; name = "libRNExitApp.a"; path = "libRNExitApp.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -332,6 +335,7 @@
 				59066F20D8B945D9B4D40595 /* libsqlite3.0.tbd in Frameworks */,
 				E689051A9B5D4FA8B0CA0319 /* libRNVectorIcons.a in Frameworks */,
 				BA4168CD00B8428F8D48474D /* libRNSnackbar.a in Frameworks */,
+				64A231FDABED4836822D5502 /* libRNExitApp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -504,6 +508,7 @@
 				C1D464BF8F2C4F1B824952A5 /* SQLite.xcodeproj */,
 				9B4FCF23B43F4CBAAA70DDC8 /* RNVectorIcons.xcodeproj */,
 				D5D2C059DBA84DC6B6CE7DB6 /* RNSnackbar.xcodeproj */,
+				17B540005E3C44F7B51C26E8 /* RNExitApp.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1092,6 +1097,7 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/nppms.app/nppms";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1119,6 +1125,7 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/nppms.app/nppms";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1204,6 +1211,7 @@
 				TVOS_DEPLOYMENT_TARGET = 9.2;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1240,6 +1248,7 @@
 				TVOS_DEPLOYMENT_TARGET = 9.2;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1271,6 +1280,7 @@
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 			};
 			name = Debug;
@@ -1295,6 +1305,7 @@
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 			};
 			name = Release;

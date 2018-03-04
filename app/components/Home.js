@@ -228,7 +228,8 @@ export default class Home extends Component {
                     id='fill-poly'/>
               </MapboxGL.Animated.ShapeSource>
             </MapboxGL.MapView>
-
+            <View style={{ position: 'absolute',
+              top: 0, bottom: 0, right: 0, height: "100%", width: 20,  backgroundColor: 'transparent', zIndex:100 }}/>
 
             {store.activeIncidencia &&
             <View style={[styles.container, styles.bottomBar, {backgroundColor: "#58a721"}]}>

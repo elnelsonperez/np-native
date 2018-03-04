@@ -5017,6 +5017,10 @@ react-native-drawer-layout@1.3.2:
   dependencies:
     react-native-dismiss-keyboard "1.0.0"
 
+react-native-exit-app@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-exit-app/-/react-native-exit-app-1.0.0.tgz#a2fbb121d902e6967cd8a365fe8453e5c4bc3172"
+
 react-native-gifted-chat@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/react-native-gifted-chat/-/react-native-gifted-chat-0.3.0.tgz#ab371723e3ddad07385d0ff1dbfcae156151daad"

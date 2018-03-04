@@ -18,6 +18,9 @@ const Bluetooth = {
   sendMessage: function (BtMessage) {
     BluetoothModule.send(BtMessage.toJson())
   },
+  stopBluetoothService: function () {
+    BluetoothModule.stopBluetoothService()
+  },
   searchForNpModule: function () {
     BluetoothModule.searchForNpModule()
   },
