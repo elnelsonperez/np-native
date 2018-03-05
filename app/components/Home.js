@@ -12,6 +12,7 @@ import {inject, observer} from "mobx-react";
 import {autorun} from "mobx";
 import centroid from '@turf/centroid'
 import midpoint from '@turf/midpoint'
+
 @inject('store')
 @observer
 export default class Home extends Component {

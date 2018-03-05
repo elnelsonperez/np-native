@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View,Text,StyleSheet } from 'react-native';
+import { View,Text,StyleSheet,InteractionManager } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat'
 import {observer,inject} from 'mobx-react'
 import {autorun} from 'mobx'
@@ -16,9 +16,11 @@ export default class Chat extends Component {
     this.avatarPressed = this.avatarPressed.bind(this)
     this._disposer = autorun(() => {
       if (this.props.navigation.state.key === "Mensajes") {
-        if (this.props.store.unreadMessagesCount > 0) {
-          this.props.store.markUnreadMessagesAsRead()
-        }
+        InteractionManager.runAfterInteractions(() => {
+          if (this.props.store.unreadMessagesCount > 0) {
+            this.props.store.markUnreadMessagesAsRead()
+          }
+        });
       }
     })
   }
@@ -28,7 +30,9 @@ export default class Chat extends Component {
   }
 
   onSend(mensajes = []) {
-    this.props.store.sendMessagesToServer(mensajes)
+    InteractionManager.runAfterInteractions(() => {
+      this.props.store.sendMessagesToServer(mensajes)
+    });
   }
 
   renderSend(props) {

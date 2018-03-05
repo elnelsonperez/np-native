@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import {StyleSheet, Text, View,BackHandler} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {observer,inject} from 'mobx-react'
 import {autorun} from 'mobx'
-import {Bluetooth} from './Bluetooth/BluetoothModule'
-import RNExitApp from 'react-native-exit-app';
+
 @inject('store')
 @observer
 export default class Splash extends Component {
@@ -13,13 +12,6 @@ export default class Splash extends Component {
     this.state = {
       statusText: "Inicializando"
     }
-
-    BackHandler.addEventListener('hardwareBackPress', function() {
-      Bluetooth.stopBluetoothService();
-      RNExitApp.exitApp();
-      return true;
-    });
-
   }
 
   componentWillMount () {
@@ -35,7 +27,7 @@ export default class Splash extends Component {
               if (store.config) {
                 this.setState({statusText: "Configuracion cargada"})
 
-                this.props.onReady()
+                  this.props.onReady()
 
               } else {
                 store.sendConfigRequest()

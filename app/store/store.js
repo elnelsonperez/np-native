@@ -4,7 +4,7 @@ import {Bluetooth} from './../components/Bluetooth/BluetoothModule'
 import BtMessage from "../core/BtMessage";
 import moment from 'moment'
 import {Incidencia} from './../shared'
-
+import NotificationsManager from './../core/NotificationsManager'
 class store {
   @observable mensajes = []
   @observable incidencias = []
@@ -172,7 +172,9 @@ class store {
                 }
               }
           ))
+      NotificationsManager.newMessages()
     }
+
   }
 
   @action markUnreadMessagesAsRead () {
@@ -202,6 +204,7 @@ class store {
       return a.id - b.id
     })
     if (incidencias.length > 0){
+      NotificationsManager.newIncidencia(incidencias[0])
       return incidencias[0]
     }
     return null

@@ -126,20 +126,6 @@ public class BluetoothModule extends ReactContextBaseJavaModule {
         sendEventWithStringData(DATA_RECEIVED, msg);
     }
 
-//    private void parseIncomingMessage (String msg) {
-//        try {
-//            BtMessage mensaje =  gson.fromJson(msg, BtMessage.class);
-//            WritableMap params = Arguments.createMap();
-//            params.putString("type", mensaje.getType());
-//            params.putDouble("corr_id", mensaje.getCorr_id());
-//            params.putMap("payload", Arguments.makeNativeMap(mensaje.getPayload()));
-//            sendEvent(DATA_RECEIVED, params);
-//            System.out.println(mensaje);
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//            System.out.println("Invalid Message Received");
-//        }
-//    }
 
     private void initializeBluetoothService() {
         BluetoothConfiguration config = new BluetoothConfiguration();
@@ -314,11 +300,14 @@ public class BluetoothModule extends ReactContextBaseJavaModule {
     }
 
     private boolean isServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getCurrentActivity().getSystemService(
-                Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
+        Activity activity = getCurrentActivity();
+        if (activity != null) {
+            ActivityManager manager = (ActivityManager) activity.getSystemService(
+                    Context.ACTIVITY_SERVICE);
+            for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+                if (serviceClass.getName().equals(service.service.getClassName())) {
+                    return true;
+                }
             }
         }
         return false;

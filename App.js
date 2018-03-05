@@ -101,6 +101,7 @@ class App extends Component  {
     this._disposer()
   }
 
+
   splashReady () {
     this.setState({
       ready: true
