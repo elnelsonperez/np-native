@@ -23,14 +23,15 @@ export default class Splash extends Component {
             if (store.bluetoothStatus !== "CONNECTED") {
               this.setState({statusText: "Intentando conectar con PMS Hub"})
             } else {
-              this.setState({statusText: "Esperando configs"})
-              if (store.config) {
-                this.setState({statusText: "Configuracion cargada"})
-
+              this.setState({statusText: "Autentíquese utilizando su iButton"})
+              if (store.auth.authenticated === true) {
+                this.setState({statusText: "Esperando configs"})
+                if (store.config) {
+                  this.setState({statusText: "Configuracion cargada"})
                   this.props.onReady()
-
-              } else {
-                store.sendConfigRequest()
+                } else {
+                  store.sendConfigRequest()
+                }
               }
             }
           }

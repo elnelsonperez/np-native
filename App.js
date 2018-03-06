@@ -90,6 +90,7 @@ class App extends Component  {
     const store = this.props.store
     this._disposer = autorun (() => {
       if (store.bluetoothStatus !== "CONNECTED") {
+        store.authInvalidate()
         this.setState({
           ready: false
         })

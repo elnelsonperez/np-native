@@ -28,6 +28,9 @@ export default class BluetoothConnector extends React.Component {
         case "GET_DEVICE_CONFIG_RESPONSE":
           store.getDeviceConfigResponse(data.payload)
           break
+        case "AUTH_SUCCESS":
+          store.authValidate(data.payload)
+          break
         case "UPDATE_INCIDENCIA_STATUS_RESPONSE":
           store.updateIncidenciaStatusResponse(data.payload)
           break

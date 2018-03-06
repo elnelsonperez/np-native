@@ -12,6 +12,22 @@ class store {
   @observable bluetoothAdapterStatus = null
   @observable config = null
   @observable updatingIncidenciaStatus = false
+  @observable auth = {
+    authenticated: false,
+    timeout: false
+  }
+
+  @action resetAuthTimeout () {
+    this.authentication.timeout = false;
+  }
+
+  @action authValidate () {
+    this.authentication.authenticated = true;
+  }
+
+  @action authInvalidate() {
+    this.authentication.authenticated = false;
+  }
 
   @action setBluetoothStatus (status) {
     this.bluetoothStatus = status
