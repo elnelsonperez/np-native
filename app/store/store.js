@@ -12,21 +12,14 @@ class store {
   @observable bluetoothAdapterStatus = null
   @observable config = null
   @observable updatingIncidenciaStatus = false
-  @observable auth = {
-    authenticated: false,
-    timeout: false
-  }
+  @observable authStatus = null
 
-  @action resetAuthTimeout () {
-    this.authentication.timeout = false;
-  }
-
-  @action authValidate () {
-    this.authentication.authenticated = true;
+  @action setAuthStatus ({status}) {
+    this.authStatus = status;
   }
 
   @action authInvalidate() {
-    this.authentication.authenticated = false;
+    this.authStatus = null;
   }
 
   @action setBluetoothStatus (status) {
@@ -65,7 +58,6 @@ class store {
           ))
     }
   }
-
 
   @action newServerIncidencias (incidencias) {
     const old = this.incidencias.slice()

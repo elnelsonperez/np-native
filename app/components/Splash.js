@@ -24,7 +24,7 @@ export default class Splash extends Component {
               this.setState({statusText: "Intentando conectar con PMS Hub"})
             } else {
               this.setState({statusText: "Autentíquese utilizando su iButton"})
-              if (store.auth.authenticated === true) {
+              if (store.authStatus === "SUCCESS") {
                 this.setState({statusText: "Esperando configs"})
                 if (store.config) {
                   this.setState({statusText: "Configuracion cargada"})
@@ -32,6 +32,11 @@ export default class Splash extends Component {
                 } else {
                   store.sendConfigRequest()
                 }
+              } else if (store.authStatus === "FAILED" || store.authStatus === "NOT_EXIST") {
+                this.setState({statusText: "Autenticación Fallida"})
+                setTimeout(() => {
+                  store.authInvalidate()
+                },1000)
               }
             }
           }
