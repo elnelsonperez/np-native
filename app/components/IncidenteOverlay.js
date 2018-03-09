@@ -53,8 +53,8 @@ class IncidenteOverlay extends Component {
 
   cancelPressed() {
     Alert.alert(
-        'Confirmación de rechazo',
-        '¿Esta seguro que quiere diferir la incidencia a otra unidad?',
+        'Confirmación para cerder',
+        '¿Esta seguro que quiere ceder la incidencia a otra unidad?',
         [
           {
             text: 'NO', onPress: () => {
@@ -231,7 +231,7 @@ class IncidenteOverlay extends Component {
             <View style={{flexGrow: 1, marginRight: 2}}>
               <Button onPress={() => {
                 this.cancelPressed()
-              }} title={"Diferir"} color={'#C4351C'}/>
+              }} title={"Ceder"} color={'#C4351C'}/>
             </View>
             <View style={{flexGrow: 1, marginLeft: 2}}>
               <Button onPress={() => {
