@@ -151,7 +151,6 @@ dependencies {
     compile project(':react-native-exit-app')
     compile project(':react-native-snackbar')
     compile project(':react-native-vector-icons')
-    compile project(':react-native-background-timer')
     compile project(':react-native-push-notification')
     compile project(':mapbox-react-native-mapbox-gl')
     compile fileTree(dir: "libs", include: ["*.jar"])

@@ -6,7 +6,6 @@ import com.facebook.react.ReactApplication;
 import com.github.wumke.RNExitApp.RNExitAppPackage;
 import com.azendoo.reactnativesnackbar.SnackbarPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
-import com.ocetnik.timer.BackgroundTimerPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.mapbox.rctmgl.RCTMGLPackage;
 import com.facebook.react.ReactNativeHost;
@@ -33,7 +32,6 @@ public class MainApplication extends Application implements ReactApplication {
               new RCTMGLPackage(),
             new SnackbarPackage(),
             new VectorIconsPackage(),
-            new BackgroundTimerPackage(),
             new ReactNativePushNotificationPackage(),
 
           new NativeModulesPackage()

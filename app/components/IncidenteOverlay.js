@@ -54,7 +54,7 @@ class IncidenteOverlay extends Component {
   cancelPressed() {
     Alert.alert(
         'Confirmación de rechazo',
-        '¿Esta seguro que quiere rechazar la incidencia?',
+        '¿Esta seguro que quiere diferir la incidencia a otra unidad?',
         [
           {
             text: 'NO', onPress: () => {
@@ -231,7 +231,7 @@ class IncidenteOverlay extends Component {
             <View style={{flexGrow: 1, marginRight: 2}}>
               <Button onPress={() => {
                 this.cancelPressed()
-              }} title={"Rechazar"} color={'#C4351C'}/>
+              }} title={"Diferir"} color={'#C4351C'}/>
             </View>
             <View style={{flexGrow: 1, marginLeft: 2}}>
               <Button onPress={() => {
