@@ -20,9 +20,12 @@
   },
   "dependencies": {
     "@mapbox/react-native-mapbox-gl": "^6.0.3",
+    "@turf/boolean-point-in-polygon": "latest",
     "@turf/centroid": "latest",
+    "@turf/midpoint": "latest",
     "@turf/turf": "^5.1.6",
     "global": "^4.3.2",
+    "interval-promise": "^1.1.1",
     "mobx": "^3.5.1",
     "mobx-react": "^4.4.2",
     "moment": "^2.20.1",
@@ -41,6 +44,7 @@
     "react-native-sqlite-storage": "^3.3.4",
     "react-native-vector-icons": "^4.5.0",
     "react-navigation": "^1.1.1",
-    "react-navigation-props-mapper": "^0.2.0"
+    "react-navigation-props-mapper": "^0.2.0",
+    "turf-point": "^2.0.1"
   }
 }

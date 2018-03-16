@@ -28,7 +28,7 @@ class StatsOverlay extends Component {
     this.state = {
       fadeAnim: new Animated.Value(0),
       rollAnim: new Animated.Value(-170),
-      collapsed: false
+      collapsed: true
     }
   }
 

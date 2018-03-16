@@ -13,6 +13,8 @@ import {inject, observer} from "mobx-react";
 import {autorun} from "mobx";
 import centroid from '@turf/centroid'
 import midpoint from '@turf/midpoint'
+import pointInPolygon from '@turf/boolean-point-in-polygon'
+import point from 'turf-point'
 
 @inject('store')
 @observer
@@ -24,7 +26,8 @@ export default class Home extends Component {
       isFetchingAndroidPermission: false,
       isAndroidPermissionGranted: false,
       activeExample: -1,
-      currentIncidenciaTimeSince: null
+      currentIncidenciaTimeSince: null,
+      insideSector: true
     };
     this.handleGetDirections = this.handleGetDirections.bind(this)
     this.jumpToSector = this.jumpToSector.bind(this)
@@ -33,6 +36,7 @@ export default class Home extends Component {
   componentWillUnmount () {
     this._dispose()
     clearInterval(this._timeout)
+    clearInterval(this._timeout2)
   }
 
   componentDidMount () {
@@ -68,8 +72,21 @@ export default class Home extends Component {
         })
       }
     }, 1000);
+
+    this._timeout2 =  setInterval(() => {
+      if (store.config && store.config.sector && store.config.sector.limites) {
+        navigator.geolocation.getCurrentPosition(async res => {
+          const p = point([res.coords.longitude, res.coords.latitude])
+          this.setState({
+            insideSector: pointInPolygon(p, store.config.sector.limites)
+          })
+        })
+      }
+    }, 6000);
+
     store.sendStatsRequest()
   }
+
   async componentWillMount() {
     const isGranted = await MapboxGL.requestAndroidLocationPermissions();
     this.setState({
@@ -240,6 +257,21 @@ export default class Home extends Component {
             <View style={{ position: 'absolute',
               top: 0, bottom: 0, right: 0, height: "100%", width: 20,  backgroundColor: 'transparent', zIndex:100 }}/>
 
+
+            {!this.state.insideSector &&
+            <View style={[styles.container, styles.bottomBar, {backgroundColor: '#d0372e',
+              justifyContent: 'center',
+              opacity: .9,
+              position: 'absolute',
+              zIndex: 99,
+              width: '100%',
+              bottom: 50
+            }]}>
+              <Text style={[styles.textBottom, {fontWeight: '500', color: "#FCFCFC", fontSize: 17}]}>
+                Unidad fuera del sector asignado</Text>
+            </View>
+            }
+
             {store.activeIncidencia &&
             <View style={[styles.container, styles.bottomBar, {backgroundColor: "#58a721"}]}>
               <View style={{justifyContent: 'center', alignItems: 'center', flexGrow: 1}}>
@@ -254,15 +286,15 @@ export default class Home extends Component {
             </View>
             }
 
+
+
             {!store.activeIncidencia &&
             <View style={[styles.container, styles.bottomBar]}>
               <View style={{justifyContent: 'center', alignItems: 'center', flexGrow: 1}}>
                 <TouchableHighlight underlayColor={'transparent'} activeOpacity={0.7} onPress={this.jumpToSector}>
                   <Text style={styles.textTop}>{store.config.sector.nombre}</Text>
                 </TouchableHighlight>
-                <Text style={styles.textBottom}>
-                  Sector de patrullaje asignado
-                </Text>
+                <Text style={styles.textBottom}> Sector de patrullaje asignado</Text>
               </View>
             </View>
             }
