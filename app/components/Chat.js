@@ -16,11 +16,9 @@ export default class Chat extends Component {
     this.avatarPressed = this.avatarPressed.bind(this)
     this._disposer = autorun(() => {
       if (this.props.navigation.state.key === "Mensajes") {
-        InteractionManager.runAfterInteractions(() => {
-          if (this.props.store.unreadMessagesCount > 0) {
-            this.props.store.markUnreadMessagesAsRead()
-          }
-        });
+        if (this.props.store.unreadMessagesCount > 0) {
+          this.props.store.markUnreadMessagesAsRead()
+        }
       }
     })
   }

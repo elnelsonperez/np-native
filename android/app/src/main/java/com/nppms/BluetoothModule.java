@@ -152,8 +152,12 @@ public class BluetoothModule extends ReactContextBaseJavaModule {
 
             @Override
             public void onHostDestroy() {
-                service.stopScan();
-                service.stopService();
+                try {
+                    service.stopService();
+                    getCurrentActivity().moveTaskToBack(true);
+                    android.os.Process.killProcess(android.os.Process.myPid());
+                    System.exit(1);
+                } catch (Exception e) { }
             }
         });
 

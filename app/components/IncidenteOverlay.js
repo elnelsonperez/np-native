@@ -7,19 +7,7 @@ import {inject, observer} from "mobx-react";
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Collapsible from 'react-native-collapsible';
 import moment from 'moment'
-
-const Field = props => {
-  return (
-      <View>
-        <View >
-          <Text style={{color:'#1976D2', fontSize: 11}}>{props.small}</Text>
-        </View>
-        <View>
-          <Text>{props.big}</Text>
-        </View>
-      </View>
-  )
-}
+import Field from './Field'
 
 @inject('store')
 @observer
@@ -98,14 +86,20 @@ class IncidenteOverlay extends Component {
 
   render() {
     const {incidente, active, time} = this.props;
+
     if (this.props.store.updatingIncidenciaStatus) {
       return (
           <View style={{
-            width: '100%', height: 100, flexDirection: 'row',
+            width: '100%',
+            height: '100%',
+            flexDirection: 'row',
+            position: 'absolute',
+            zIndex: 99,
             backgroundColor: '#FCFCFC',
             justifyContent: 'center',
             alignItems: 'center',
-            padding: 5, opacity: .8
+            padding: 5,
+            opacity: .6
           }}>
             <Progress.CircleSnail
                 color={'#1976D2'}
@@ -113,7 +107,7 @@ class IncidenteOverlay extends Component {
                 indeterminate={true}
             />
           </View>
-      )
+      );
     } else {
       if (active) {
         return (

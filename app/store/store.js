@@ -13,6 +13,7 @@ class store {
   @observable config = null
   @observable updatingIncidenciaStatus = false
   @observable authStatus = null
+  @observable stats = null;
 
   @action setAuthStatus ({status}) {
     this.authStatus = status;
@@ -20,6 +21,10 @@ class store {
 
   @action authInvalidate() {
     this.authStatus = null;
+  }
+
+  @action setSectorStats(stats) {
+    this.stats = stats;
   }
 
   @action setBluetoothStatus (status) {
@@ -88,6 +93,21 @@ class store {
           new BtMessage(
               {
                 type: "SEND_MESSAGE_TO_SERVER",
+                payload: callPayload
+              }
+          ))
+    }
+  }
+
+  @action getSectorStatsResponse ({stats,status, callPayload}) {
+    if (status === "OK") {
+      this.stats = stats;
+    }
+    else if (status === "FAILED"){
+      Bluetooth.sendMessage(
+          new BtMessage(
+              {
+                type: "GET_SECTOR_STATS",
                 payload: callPayload
               }
           ))
@@ -231,7 +251,7 @@ class store {
   }
 
   @computed get unreadMessagesCount () {
-   return this.mensajes.filter(
+    return this.mensajes.filter(
         m => {
           return m.hasOwnProperty('read') && m.read === false && m.user._id !== this.userId
         }
@@ -283,6 +303,22 @@ class store {
           ))
     })
   }
+
+  @action sendStatsRequest () {
+    const sector_id = this.config.sector? this.config.sector.id : null;
+    if (sector_id) {
+      Bluetooth.sendMessage(
+          new BtMessage(
+              {
+                type: "GET_SECTOR_STATS",
+                payload: {
+                  sector_id
+                }
+              }
+          ))
+    }
+  }
+
 
 }
 

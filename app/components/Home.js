@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Overlay from './IncidenteOverlay'
+import StatsOverlay from './StatsOverlay'
 import { Text , StyleSheet,Button, View,TouchableHighlight} from 'react-native';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
 import * as Progress from 'react-native-progress';
@@ -67,7 +68,7 @@ export default class Home extends Component {
         })
       }
     }, 1000);
-
+    store.sendStatsRequest()
   }
   async componentWillMount() {
     const isGranted = await MapboxGL.requestAndroidLocationPermissions();
@@ -197,6 +198,7 @@ export default class Home extends Component {
           </View>
       )
     }
+
     else {
       return (
           <View style={{flex: 1, position: 'relative'}}>
@@ -208,6 +210,12 @@ export default class Home extends Component {
             {store.activeIncidencia !== null &&
             <Overlay incidente={store.activeIncidencia} active={true}
                      time={this.state.currentIncidenciaTimeSince}/>
+            }
+
+            {store.nextPendingIncidencia == null &&
+            store.activeIncidencia === null &&
+            store.stats &&
+            <StatsOverlay  stats={store.stats} />
             }
 
             <MapboxGL.MapView
@@ -259,8 +267,6 @@ export default class Home extends Component {
             </View>
             }
           </View>
-
-
       );
     }
   }
