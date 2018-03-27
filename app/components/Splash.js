@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View,Image} from 'react-native';
 import {observer,inject} from 'mobx-react'
 import {autorun} from 'mobx'
 
@@ -52,8 +52,13 @@ export default class Splash extends Component {
   render() {
     return (
         <View style={styles.container}>
-          <Text style={styles.logoText}>NP PMS</Text>
-
+          <Image
+              style={{
+                width: 600,
+                height: 200,
+                resizeMode: 'contain'}}
+              source={require("./../static/logo.png")}
+          />
           <Text style={styles.status}>{this.state.statusText}</Text>
         </View>
     );
@@ -71,7 +76,7 @@ const styles = StyleSheet.create({
 
   },
   status: {
-    fontSize: 15,
+    fontSize: 18,
     fontFamily: "Roboto",
     fontWeight: "300",
     color: "#ffff"
