@@ -13,7 +13,6 @@ export default class BluetoothConnector extends React.Component {
 
     const store = this.props.store
     Bluetooth.on(Events.STATUS_CHANGED, (e) => {
-
       store.setBluetoothStatus(e)
     })
 
@@ -54,16 +53,7 @@ export default class BluetoothConnector extends React.Component {
       console.log(b.message)
     })
 
-    // for (let item in Events) {
-    //   if (Events.hasOwnProperty(item)) {
-    //     Bluetooth.on(Events[item], (e) => {
-    //       console.log(e)
-    //     })
-    //   }
-    // }
-
   }
-
 
   ReqMsg() {
     Bluetooth.sendMessage(
@@ -74,7 +64,6 @@ export default class BluetoothConnector extends React.Component {
             }
         ))
   }
-
 
   enableAutoPull () {
     Bluetooth.sendMessage(
@@ -89,6 +78,7 @@ export default class BluetoothConnector extends React.Component {
   searchForNpmodule() {
     Bluetooth.searchForNpModule();
   }
+
   render () {
     console.log(this.props.store.bluetoothStatus)
     return null
