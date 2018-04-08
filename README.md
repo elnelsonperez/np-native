@@ -16,6 +16,20 @@ Es **muy** importante hecharle muy buen ojo y entender lo siguiente:
 * [React Native for Beginners](https://medium.com/techtrument/react-native-for-beginners-8b6e185e12f9)
 * [Mobx](https://mobx.js.org/)
 
+##### Como instalar
+Primero hay que seguir las isntrucciones de la [guia de React Native](https://facebook.github.io/react-native/docs/getting-started.html).
+Luego de esto deberas tener Java, Android Studio, Node, y los demas componentes necesarios instalados.
+Tambien es necesario instalar [Yarn](https://yarnpkg.com/lang/en/docs/install/).
+
+Luego,
+* Haz cd al directorio del proyecto y ejecuta `yarn`. Esto instalara todas las dependencias de Node.
+* Conecta tu dispositivo android a la pc y sigue el siguiente tutorial. 
+[React Native - Running on Device](https://facebook.github.io/react-native/docs/running-on-device.html)
+* Luego, ejecuta `yarn start`, y en otra sesion de la terminal, `yarn android`
+ (esto es lo mismo que correr `react-native run-android`, como se puede ver en la seccion `scripts` del archivo `package.json`).
+
+La aplicacion deberia instalarse en tu equipo e iniciarse correctamente.
+
 ##### Comunicacion con el NP HUB
 La app se conecta con el hub utilizando un modulo nativo creado en Java,
 llamado BluetoothModule. Se encuentra en el directorio`android/app/src/main/java/com/nppms`.
